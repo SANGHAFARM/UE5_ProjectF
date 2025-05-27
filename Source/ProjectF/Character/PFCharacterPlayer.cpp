@@ -12,11 +12,12 @@
 APFCharacterPlayer::APFCharacterPlayer()
 {
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	Camera->SetupAttachment(RootComponent);
+	// Mesh Component를 부모로 설정하고, 부모 Mesh의 "SOCKET_Camera" 소켓에 카메라 부착
+	Camera->SetupAttachment(GetMesh(), TEXT("SOCKET_Camera"));
 	// 카메라의 회전이 컨트롤러(폰)의 회전을 따르도록 설정
 	Camera->bUsePawnControlRotation = true;
 	// 카메라의 위치를 1인칭에 맞게 캐릭터의 머리 위치로 설정
-	Camera->SetRelativeLocation(FVector(10.0f, 0.0f, 80.0f));
+	//Camera->SetRelativeLocation(FVector(10.0f, 0.0f, 80.0f));
 
 	// 캐릭터는 항상 컨트롤러의 Yaw 회전 값을 따르도록 설정
 	bUseControllerRotationPitch = false;
@@ -28,25 +29,25 @@ APFCharacterPlayer::APFCharacterPlayer()
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	
 	// 입력
-	static ConstructorHelpers::FObjectFinder<UInputMappingContext> DefaultMappingContextRef(TEXT("/Game/ProjectFiles/Input/IMC_Default.IMC_Default"));
+	static ConstructorHelpers::FObjectFinder<UInputMappingContext> DefaultMappingContextRef(TEXT("/Game/ProjectF/Input/IMC_Default.IMC_Default"));
 	if (DefaultMappingContextRef.Object)
 	{
 		DefaultMappingContext = DefaultMappingContextRef.Object;
 	}
 	
-	static ConstructorHelpers::FObjectFinder<UInputAction> MoveActionRef(TEXT("/Game/ProjectFiles/Input/Actions/IA_Move.IA_Move"));
+	static ConstructorHelpers::FObjectFinder<UInputAction> MoveActionRef(TEXT("/Game/ProjectF/Input/Actions/IA_Move.IA_Move"));
 	if (MoveActionRef.Object)
 	{
 		MoveAction = MoveActionRef.Object;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UInputAction> LookActionRef(TEXT("/Game/ProjectFiles/Input/Actions/IA_Look.IA_Look"));
+	static ConstructorHelpers::FObjectFinder<UInputAction> LookActionRef(TEXT("/Game/ProjectF/Input/Actions/IA_Look.IA_Look"));
 	if (LookActionRef.Object)
 	{
 		LookAction = LookActionRef.Object;
 	}
 
-	static ConstructorHelpers::FObjectFinder<UInputAction> JumpActionRef(TEXT("/Game/ProjectFiles/Input/Actions/IA_Jump.IA_Jump"));
+	static ConstructorHelpers::FObjectFinder<UInputAction> JumpActionRef(TEXT("/Game/ProjectF/Input/Actions/IA_Jump.IA_Jump"));
 	if (JumpActionRef.Object)
 	{
 		JumpAction = JumpActionRef.Object;
