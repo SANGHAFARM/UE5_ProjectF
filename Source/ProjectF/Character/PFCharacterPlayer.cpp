@@ -7,18 +7,25 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
 
 APFCharacterPlayer::APFCharacterPlayer()
 {
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
+	// Mesh Component를 부모로 설정하고, 부모 Mesh의 "SOCKET_Camera" 소켓에 SpringArm 부착
+	//SpringArm->SetupAttachment(GetMesh(), TEXT("SOCKET_Camera"));
+	SpringArm->SetupAttachment(RootComponent);
+	SpringArm->TargetArmLength = 0.0f;
+	
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	// Mesh Component를 부모로 설정하고, 부모 Mesh의 "SOCKET_Camera" 소켓에 카메라 부착
-	Camera->SetupAttachment(GetMesh(), TEXT("SOCKET_Camera"));
+	Camera->SetupAttachment(SpringArm);
 	// 카메라의 회전이 컨트롤러(폰)의 회전을 따르도록 설정
 	Camera->bUsePawnControlRotation = true;
 	// 카메라의 위치를 1인칭에 맞게 캐릭터의 머리 위치로 설정
 	//Camera->SetRelativeLocation(FVector(10.0f, 0.0f, 80.0f));
-
+	
 	// 캐릭터는 항상 컨트롤러의 Yaw 회전 값을 따르도록 설정
 	bUseControllerRotationPitch = false;
 	bUseControllerRotationYaw = true;
@@ -52,6 +59,32 @@ APFCharacterPlayer::APFCharacterPlayer()
 	{
 		JumpAction = JumpActionRef.Object;
 	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> SprintActionRef(TEXT("/Game/ProjectF/Input/Actions/IA_Sprint.IA_Sprint"));
+	if (SprintActionRef.Object)
+	{
+		SprintAction = SprintActionRef.Object;
+	}
+	
+	static ConstructorHelpers::FObjectFinder<UInputAction> CrouchActionRef(TEXT("/Game/ProjectF/Input/Actions/IA_Crouch.IA_Crouch"));
+	if (CrouchActionRef.Object)
+	{
+		CrouchAction = CrouchActionRef.Object;
+	}
+
+	// 기준 달리기 속도 저장
+	DefaultMaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
+
+	// 기준 FOV 값 저장
+	Camera->FieldOfView = DefaultFOV;
+
+	// 캐릭터가 앉기를 사용할 수 있는 여부 설정
+	GetCharacterMovement()->GetNavAgentPropertiesRef().bCanCrouch = true;
+
+	// 기준 캡슐 높이 설정
+	DefaultCapsuleHalfHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+	// 캐릭터가 앉았을 때 캡슐 크기를 평상시 캡슐 크기의 반으로 설정
+	GetCharacterMovement()->CrouchedHalfHeight = DefaultCapsuleHalfHeight / 2;
 }
 
 void APFCharacterPlayer::BeginPlay()
@@ -85,7 +118,54 @@ void APFCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	// InputAction과 함수 바인딩
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::Move);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::Look);
-	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &ACharacter::Jump);
+	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::Jump);
+	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::ToggleSprint);
+	EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::ToggleCrouch);
+}
+
+void APFCharacterPlayer::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+
+	if (bIsInterpolatingCrouch && CrouchCurve)
+	{
+		CrouchElapsedTime += DeltaSeconds;
+		float Alpha = FMath::Clamp(CrouchElapsedTime / CrouchDuration, 0.0f, 1.0f);
+
+		float CurveVal = CrouchCurve->GetFloatValue(Alpha);
+		float NewHeight = FMath::Lerp(StartCapsuleHalfHeight, TargetCapsuleHalfHeight, CurveVal);
+
+		float CurrentHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+		float Delta = CurrentHeight - NewHeight;
+
+		// 발 위치를 유지시키며 Mesh가 순간이동 또는 지면을 뚫는 것을 방지
+		AddActorWorldOffset(FVector(0, 0, -Delta));
+		GetCapsuleComponent()->SetCapsuleHalfHeight(NewHeight, false);
+
+		// Alpha 값이 1에 도달하면 Crouch 보간을 중단
+		if (Alpha >= 1.0f)
+		{
+			bIsInterpolatingCrouch = false;
+		}
+	}
+
+	if (bIsInterpolatingFOV && SprintFOVCurve)
+	{
+		// 경과 시간을 누적하고 FOVCurve에서 경과 시간에 일치하는 값으로 FOV를 업데이트
+		FOVElapsedTime += DeltaSeconds;
+		float Alpha = FMath::Clamp(FOVElapsedTime / FOVTransitionDuration, 0.0f, 1.0f);
+		
+		float CurveVal = SprintFOVCurve->GetFloatValue(Alpha);
+		float NewFOV = FMath::Lerp(StartFOV, TargetFOV, CurveVal);
+
+		Camera->SetFieldOfView(NewFOV);
+
+		// Alpha 값이 1에 도달하면 FOV 보간을 중단
+		if (Alpha >= 1.0f)
+		{
+			bIsInterpolatingFOV = false;
+		}
+	}
 }
 
 void APFCharacterPlayer::Move(const FInputActionValue& Value)
@@ -114,4 +194,115 @@ void APFCharacterPlayer::Look(const FInputActionValue& Value)
 	// 컨트롤러에 회전 추가
 	AddControllerYawInput(LookVector.X);
 	AddControllerPitchInput(LookVector.Y);
+}
+
+void APFCharacterPlayer::Jump()
+{
+	Super::Jump();
+
+	// 달리기 중에 점프를 하면 달리기 취소
+	if (bIsSprint)
+	{
+		ToggleSprint();
+	}
+}
+
+void APFCharacterPlayer::ToggleCrouch()
+{
+	if (GetCharacterMovement()->IsCrouching())
+	{
+		UnCrouch();
+		SetCrouch(false);
+	}
+	else
+	{
+		if (CanCrouch())
+		{
+			Crouch();
+			SetCrouch(true);
+		}
+	}
+}
+
+void APFCharacterPlayer::ToggleSprint()
+{
+	bIsSprint = !bIsSprint;
+	
+	// true면 달리기
+	if (bIsSprint)
+	{
+		SprintOn();
+	}
+	// false면 걷기
+	else
+	{
+		SprintOff();
+	}
+}
+
+void APFCharacterPlayer::SetFOV(const float InTargetFOV)
+{
+	if (Camera)
+	{
+		// 현재 FOV 값과 목표 FOV 값을 설정
+		StartFOV = Camera->FieldOfView;
+		TargetFOV = InTargetFOV;
+		FOVElapsedTime = 0.0f;
+		bIsInterpolatingFOV = true;
+	}
+}
+
+void APFCharacterPlayer::SprintOn()
+{
+	SetFOV(SprintFOV);
+
+	// 현재 앉기 상태라면 앉기 취소
+	if (bIsCrouched)
+	{
+		ToggleCrouch();
+	}
+	
+	// 달리기 속도 2배로 설정
+	GetCharacterMovement()->MaxWalkSpeed = DefaultMaxWalkSpeed * 2;
+}
+
+void APFCharacterPlayer::SprintOff()
+{
+	SetFOV(DefaultFOV);
+
+	// 달리기 속도 기본으로 설정
+	GetCharacterMovement()->MaxWalkSpeed = DefaultMaxWalkSpeed;
+}
+
+void APFCharacterPlayer::SetCrouch(bool bSetCrouch)
+{
+	bIsInterpolatingCrouch = true;
+	CrouchElapsedTime = 0.0f;
+
+	StartCapsuleHalfHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
+
+	if (bSetCrouch)
+	{
+		TargetCapsuleHalfHeight = GetCharacterMovement()->CrouchedHalfHeight;
+	}
+	else
+	{
+		TargetCapsuleHalfHeight = DefaultCapsuleHalfHeight;
+	}
+}
+
+void APFCharacterPlayer::Crouch(bool bClientSimulation)
+{
+	Super::Crouch(bClientSimulation);
+
+	// 달리기 중에 앉으면 달리기 취소
+	if (bIsSprint)
+	{
+		ToggleSprint();
+	}
+}
+
+void APFCharacterPlayer::UnCrouch(bool bClientSimulation)
+{
+	Super::UnCrouch(bClientSimulation);
 }
