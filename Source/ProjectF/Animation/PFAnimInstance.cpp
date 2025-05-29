@@ -36,6 +36,7 @@ void UPFAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		GroundSpeed = Velocity.Size2D();
 		bIsIdle = GroundSpeed < MovingThreshold;
 		bIsFalling = Movement->IsFalling();
+		bIsCrouching = Movement->IsCrouching();
 		bIsJumping = bIsFalling && (Velocity.Z > JumpingThreshold);
 	}
 }

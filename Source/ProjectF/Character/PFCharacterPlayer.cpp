@@ -10,21 +10,34 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
+#include "ProjectF/Weapon/WeaponBase.h"
 
 APFCharacterPlayer::APFCharacterPlayer()
 {
-	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArm"));
-	// Mesh Component를 부모로 설정하고, 부모 Mesh의 "SOCKET_Camera" 소켓에 SpringArm 부착
-	//SpringArm->SetupAttachment(GetMesh(), TEXT("SOCKET_Camera"));
-	SpringArm->SetupAttachment(RootComponent);
-	SpringArm->TargetArmLength = 0.0f;
+	// ACharacter로부터 상속받은 Mesh는 사용하지 않을 예정이기 때문에 각종 설정을 비활성화
+	GetMesh()->SetAutoActivate(false);
+	GetMesh()->CastShadow = false;
+	GetMesh()->SetVisibility(false);
 	
+	// Pivot
+	// Mesh를 부착해서 Pitch 회전 시 Pivot에 따라 Mesh가 움직이도록 설정하기 위한 기준점
+	Pivot = CreateDefaultSubobject<USceneComponent>(TEXT("Pivot"));
+	Pivot->SetupAttachment(RootComponent);
+	Pivot->SetRelativeLocation(FVector(0.0f, 0.0f, 75.0f));
+	
+	// CharacterArms
+	// Pivot에 붙여서 Pitch 회전에 따라 Mesh를 회전시키기 위해 사용할 진짜 Mesh
+	CharacterArms = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterArms"));
+	CharacterArms->SetupAttachment(Pivot);
+	CharacterArms->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -160.0f), FRotator(0.0f, 0.0f, -90.0f));
+	
+	// Camera
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
-	Camera->SetupAttachment(SpringArm);
+	Camera->SetupAttachment(CharacterArms, TEXT("head"));
 	// 카메라의 회전이 컨트롤러(폰)의 회전을 따르도록 설정
 	Camera->bUsePawnControlRotation = true;
 	// 카메라의 위치를 1인칭에 맞게 캐릭터의 머리 위치로 설정
-	//Camera->SetRelativeLocation(FVector(10.0f, 0.0f, 80.0f));
+	Camera->SetRelativeRotation(FRotator(-90.0f, 0.0f, 90.0f));
 	
 	// 캐릭터는 항상 컨트롤러의 Yaw 회전 값을 따르도록 설정
 	bUseControllerRotationPitch = false;
@@ -70,6 +83,12 @@ APFCharacterPlayer::APFCharacterPlayer()
 	if (CrouchActionRef.Object)
 	{
 		CrouchAction = CrouchActionRef.Object;
+	}
+
+	static ConstructorHelpers::FObjectFinder<UInputAction> AimActionRef(TEXT("/Game/ProjectF/Input/Actions/IA_Aim.IA_Aim"));
+	if (AimActionRef.Object)
+	{
+		AimAction = AimActionRef.Object;
 	}
 
 	// 기준 달리기 속도 저장
@@ -121,6 +140,8 @@ void APFCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::Jump);
 	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::ToggleSprint);
 	EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::ToggleCrouch);
+	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::AimOn);
+	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &APFCharacterPlayer::AimOff);
 }
 
 void APFCharacterPlayer::Tick(float DeltaSeconds)
@@ -138,7 +159,7 @@ void APFCharacterPlayer::Tick(float DeltaSeconds)
 		float CurrentHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
 		float Delta = CurrentHeight - NewHeight;
 
-		// 발 위치를 유지시키며 Mesh가 순간이동 또는 지면을 뚫는 것을 방지
+		// 현재 위치를 유지시키며 Mesh가 순간이동 또는 지면을 뚫는 것을 방지
 		AddActorWorldOffset(FVector(0, 0, -Delta));
 		GetCapsuleComponent()->SetCapsuleHalfHeight(NewHeight, false);
 
@@ -164,6 +185,30 @@ void APFCharacterPlayer::Tick(float DeltaSeconds)
 		if (Alpha >= 1.0f)
 		{
 			bIsInterpolatingFOV = false;
+		}
+	}
+
+	if (Controller && Pivot)
+	{
+		// Mesh를 Controller의 Pitch와 일치
+		Pivot->SetRelativeRotation(FRotator(GetControlRotation().Pitch, 0.0f, 0.0f));
+	}
+
+	if (Camera)
+	{
+		FHitResult HitResult;
+		FVector Start = Camera->GetComponentLocation();
+		FVector End = Start + Camera->GetForwardVector() * 100.0f;
+		
+		// 카메라로부터 카메라 전방 벡터 방향의 End 지점 사이에 물체 유무 확인 LineTrace
+		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility);
+		if (bHit)
+		{
+			bCloseToWall = true;
+		}
+		else
+		{
+			bCloseToWall = false;
 		}
 	}
 }
@@ -238,6 +283,16 @@ void APFCharacterPlayer::ToggleSprint()
 	{
 		SprintOff();
 	}
+}
+
+void APFCharacterPlayer::AimOn()
+{
+	bIsAiming = true;
+}
+
+void APFCharacterPlayer::AimOff()
+{
+	bIsAiming = false;
 }
 
 void APFCharacterPlayer::SetFOV(const float InTargetFOV)

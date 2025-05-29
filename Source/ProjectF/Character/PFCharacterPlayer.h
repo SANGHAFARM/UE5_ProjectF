@@ -8,7 +8,7 @@
 #include "Components/TimelineComponent.h"
 #include "PFCharacterPlayer.generated.h"
 
-class USpringArmComponent;
+class AWeaponBase;
 class UInputMappingContext;
 class UInputAction;
 class UCameraComponent;
@@ -29,6 +29,11 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
+	// Getter
+public:
+	FORCEINLINE bool GetIsAiming() const { return bIsAiming; }
+	FORCEINLINE bool GetCloseToWall() const { return bCloseToWall; }
+
 	// 조작
 protected:
 	void Move(const FInputActionValue& Value);
@@ -37,16 +42,27 @@ protected:
 	// 오버라이드된 Crouch()와 UnCrouch() 함수의 래핑 함수
 	void ToggleCrouch();
 	void ToggleSprint();
+	void AimOn();
+	void AimOff();
+
+	// 캐릭터
+protected:
+	UPROPERTY(EditAnywhere, Category = Mesh)
+	USkeletalMeshComponent* CharacterArms;
+
+	// 캐릭터 Mesh 회전의 기준 축이 될 Pivot
+	UPROPERTY(EditAnywhere, Category = Pivot)
+	USceneComponent* Pivot;
 
 	// 카메라
 protected:
 	UPROPERTY(EditAnywhere, Category = Camera)
-	TObjectPtr<USpringArmComponent> SpringArm;
-	
-	UPROPERTY(EditAnywhere, Category = Camera)
 	TObjectPtr<UCameraComponent> Camera;
 
-	// 매개변수 값으로 FOV 설정 함수
+	// 카메라가 벽과 가까운지 여부
+	uint8 bCloseToWall : 1 = false;
+
+	// 매개변수 값으로 FOV를 설정하는 함수
 	void SetFOV(const float InTargetFOV);
 
 	// Field Of View
@@ -79,25 +95,28 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Input)
 	TObjectPtr<UInputAction> CrouchAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	TObjectPtr<UInputAction> AimAction;
 	
 	// 달리기
 protected:
-	UPROPERTY(BlueprintReadOnly, Category = "Sprint")
+	UPROPERTY(BlueprintReadOnly, Category = Sprint)
 	uint8 bIsSprint : 1 = false;
 
-	float DefaultMaxWalkSpeed;
-
-	UPROPERTY(EditAnywhere, Category = "Sprint")
+	UPROPERTY(EditAnywhere, Category = Sprint)
 	UCurveFloat* SprintFOVCurve;
+
+	float DefaultMaxWalkSpeed;
 
 	void SprintOn();
 	void SprintOff();
 
 	// 앉기
-	UPROPERTY(EditAnywhere, Category = "Crouch")
+	UPROPERTY(EditAnywhere, Category = Crouch)
 	UCurveFloat* CrouchCurve;
 
-	UPROPERTY(EditAnywhere, Category = "Crouch")
+	UPROPERTY(EditAnywhere, Category = Crouch)
 	float CrouchDuration = 0.3f;
 
 	float CrouchElapsedTime = 0.0f;
@@ -111,4 +130,11 @@ protected:
 	
 	virtual void Crouch(bool bClientSimulation = false) override;
 	virtual void UnCrouch(bool bClientSimulation = false) override;
+
+	// 무기
+protected:
+	UPROPERTY(EditAnywhere, Category = Weapon)
+	TObjectPtr<AWeaponBase> Weapon = nullptr;
+
+	uint8 bIsAiming : 1 = false;
 };
