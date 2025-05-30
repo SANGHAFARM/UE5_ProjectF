@@ -30,6 +30,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PFCharacter)
 	uint8 bIsAiming : 1;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Character)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PFCharacter)
 	uint8 bCloseToWall : 1;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PFCharacter)
+	uint8 bIsSprint : 1;
 };

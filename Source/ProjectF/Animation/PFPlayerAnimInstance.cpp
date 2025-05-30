@@ -26,5 +26,6 @@ void UPFPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		// 캐스팅한 PFCharacter로부터 값을 갱신
 		bIsAiming = PFCharacter->GetIsAiming();
 		bCloseToWall = PFCharacter->GetCloseToWall();
+		bIsSprint = PFCharacter->GetIsSprint();
 	}
 }

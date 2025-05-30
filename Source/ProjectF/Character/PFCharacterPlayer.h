@@ -33,6 +33,7 @@ public:
 public:
 	FORCEINLINE bool GetIsAiming() const { return bIsAiming; }
 	FORCEINLINE bool GetCloseToWall() const { return bCloseToWall; }
+	FORCEINLINE bool GetIsSprint() const { return bIsSprint; }
 
 	// 조작
 protected:

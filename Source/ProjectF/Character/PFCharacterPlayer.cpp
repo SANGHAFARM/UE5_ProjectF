@@ -288,6 +288,12 @@ void APFCharacterPlayer::ToggleSprint()
 void APFCharacterPlayer::AimOn()
 {
 	bIsAiming = true;
+
+	// 달리기 상태라면 달리기 취소
+	if (bIsSprint)
+	{
+		ToggleSprint();
+	}
 }
 
 void APFCharacterPlayer::AimOff()
