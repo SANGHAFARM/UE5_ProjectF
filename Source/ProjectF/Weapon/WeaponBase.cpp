@@ -17,7 +17,8 @@ AWeaponBase::AWeaponBase()
 void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	MaxAmmo = 30;
 }
 
 // Called every frame

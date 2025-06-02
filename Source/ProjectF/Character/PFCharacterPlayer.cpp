@@ -103,7 +103,7 @@ APFCharacterPlayer::APFCharacterPlayer()
 	// 기준 캡슐 높이 설정
 	DefaultCapsuleHalfHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
 	// 캐릭터가 앉았을 때 캡슐 크기를 평상시 캡슐 크기의 반으로 설정
-	GetCharacterMovement()->CrouchedHalfHeight = DefaultCapsuleHalfHeight / 2;
+	GetCharacterMovement()->SetCrouchedHalfHeight(DefaultCapsuleHalfHeight / 2);
 }
 
 void APFCharacterPlayer::BeginPlay()
@@ -137,6 +137,7 @@ void APFCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	// InputAction과 함수 바인딩
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::Move);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::Look);
+	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Completed, this, &APFCharacterPlayer::LookEnd);
 	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::Jump);
 	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::ToggleSprint);
 	EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::ToggleCrouch);
@@ -234,11 +235,17 @@ void APFCharacterPlayer::Move(const FInputActionValue& Value)
 void APFCharacterPlayer::Look(const FInputActionValue& Value)
 {
 	// 입력 값 읽기
-	FVector2D LookVector = Value.Get<FVector2D>();
+	MouseInput = Value.Get<FVector2D>();
 	
 	// 컨트롤러에 회전 추가
-	AddControllerYawInput(LookVector.X);
-	AddControllerPitchInput(LookVector.Y);
+	AddControllerYawInput(MouseInput.X);
+	AddControllerPitchInput(MouseInput.Y);
+}
+
+void APFCharacterPlayer::LookEnd(const FInputActionValue& Value)
+{
+	// 입력 값 읽기
+	MouseInput = Value.Get<FVector2D>();
 }
 
 void APFCharacterPlayer::Jump()
@@ -344,7 +351,7 @@ void APFCharacterPlayer::SetCrouch(bool bSetCrouch)
 
 	if (bSetCrouch)
 	{
-		TargetCapsuleHalfHeight = GetCharacterMovement()->CrouchedHalfHeight;
+		TargetCapsuleHalfHeight = GetCharacterMovement()->GetCrouchedHalfHeight();
 	}
 	else
 	{

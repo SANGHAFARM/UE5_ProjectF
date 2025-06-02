@@ -34,11 +34,17 @@ public:
 	FORCEINLINE bool GetIsAiming() const { return bIsAiming; }
 	FORCEINLINE bool GetCloseToWall() const { return bCloseToWall; }
 	FORCEINLINE bool GetIsSprint() const { return bIsSprint; }
+	FORCEINLINE FVector2D GetMouseInput() const { return MouseInput; }
 
 	// 조작
 protected:
+	// 애니메이션에 쓰기 위해 마우스 입력 값 저장
+	FVector2D MouseInput;
+	
 	void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
+	// 애니메이션에 Mouse 값을 넘겨주기 위해 LookAction에 바인딩할 Complete 함수
+	void LookEnd(const FInputActionValue& Value);
 	virtual void Jump() override;
 	// 오버라이드된 Crouch()와 UnCrouch() 함수의 래핑 함수
 	void ToggleCrouch();

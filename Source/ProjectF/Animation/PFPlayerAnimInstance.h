@@ -35,4 +35,10 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PFCharacter)
 	uint8 bIsSprint : 1;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PFCharacter)
+	float JumpVelocity;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PFCharacter)
+	FVector MouseSwayLocation;
 };

@@ -26,4 +26,10 @@ public:
 protected:
 	UPROPERTY(EditAnywhere, Category = Weapon)
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+
+	UPROPERTY(VisibleAnywhere, Category = Weapon)
+	uint32 CurrentAmmo;
+
+	UPROPERTY(EditAnywhere, Category = Weapon)
+	uint32 MaxAmmo;
 };
