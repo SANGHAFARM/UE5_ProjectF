@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "WeaponBase.generated.h"
 
+DECLARE_DELEGATE_TwoParams(FOnAmmoChanged, uint32, uint32);
+
 UCLASS()
 class PROJECTF_API AWeaponBase : public AActor
 {
@@ -14,6 +16,14 @@ class PROJECTF_API AWeaponBase : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AWeaponBase();
+
+	FOnAmmoChanged OnAmmoChanged;
+	
+public:
+	FORCEINLINE uint32 GetCurrentAmmo() const { return CurrentAmmo; }
+	FORCEINLINE uint32 GetMaxAmmo() const { return CurrentAmmo; }
+
+	void ConsumeBullet();
 
 protected:
 	// Called when the game starts or when spawned

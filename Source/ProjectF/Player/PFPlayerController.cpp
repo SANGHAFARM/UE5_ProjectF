@@ -8,7 +8,7 @@
 APFPlayerController::APFPlayerController()
 {
 	// 위젯 블루프린트 에셋에서 클래스 정보 로드
-	static ConstructorHelpers::FClassFinder<UPFHUDWidget> PFHUDWidgetRef(TEXT("/Game/ProjectF/Blueprints/UI/WBP_PlayerUI.WBP_PlayerUI_C"));
+	static ConstructorHelpers::FClassFinder<UPFHUDWidget> PFHUDWidgetRef(TEXT("/Game/ProjectF/Blueprints/UI/WBP_HUD.WBP_HUD_C"));
 	if (PFHUDWidgetRef.Class)
 	{
 		PFHUDWidgetClass = PFHUDWidgetRef.Class;

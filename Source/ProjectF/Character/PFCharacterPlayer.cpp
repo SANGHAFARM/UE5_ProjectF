@@ -9,7 +9,7 @@
 #include "InputMappingContext.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/SpringArmComponent.h"
+#include "ProjectF/UI/PFHUDWidget.h"
 #include "ProjectF/Weapon/WeaponBase.h"
 
 APFCharacterPlayer::APFCharacterPlayer()
@@ -91,6 +91,12 @@ APFCharacterPlayer::APFCharacterPlayer()
 		AimAction = AimActionRef.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UInputAction> FireActionRef(TEXT("/Game/ProjectF/Input/Actions/IA_Fire.IA_Fire"));
+	if (FireActionRef.Object)
+	{
+		FireAction = FireActionRef.Object;
+	}
+
 	// 기준 달리기 속도 저장
 	DefaultMaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 
@@ -104,6 +110,24 @@ APFCharacterPlayer::APFCharacterPlayer()
 	DefaultCapsuleHalfHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
 	// 캐릭터가 앉았을 때 캡슐 크기를 평상시 캡슐 크기의 반으로 설정
 	GetCharacterMovement()->SetCrouchedHalfHeight(DefaultCapsuleHalfHeight / 2);
+}
+
+void APFCharacterPlayer::PostInitializeComponents()
+{
+	Super::PostInitializeComponents();
+
+	if (WeaponClass)
+	{
+		FActorSpawnParameters SpawnParams;
+		// 캐릭터를 무기의 오너로 설정
+		SpawnParams.Owner = this;
+		// 인스티게이터 설정
+		SpawnParams.Instigator = GetInstigator(); 
+
+		Weapon = GetWorld()->SpawnActor<AWeaponBase>(WeaponClass, GetActorLocation(), GetActorRotation(), SpawnParams);
+		// Weapon을 CharacterArms의 ik_hand_gun 소켓에 Attach
+		Weapon->AttachToComponent(CharacterArms, FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("ik_hand_gun"));
+	}
 }
 
 void APFCharacterPlayer::BeginPlay()
@@ -143,6 +167,7 @@ void APFCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 	EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::ToggleCrouch);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::AimOn);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &APFCharacterPlayer::AimOff);
+	EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::Fire);
 }
 
 void APFCharacterPlayer::Tick(float DeltaSeconds)
@@ -210,6 +235,25 @@ void APFCharacterPlayer::Tick(float DeltaSeconds)
 		else
 		{
 			bCloseToWall = false;
+		}
+	}
+}
+
+void APFCharacterPlayer::SetupHUDWidget(UPFHUDWidget* InHUDWidget)
+{
+	if (InHUDWidget)
+	{
+		if (Weapon)
+		{
+			// 현재 Weapon의 Ammo 값으로 업데이트
+			InHUDWidget->UpdateAmmo(Weapon->GetCurrentAmmo(), Weapon->GetMaxAmmo());
+			// HUD에 표시되는 Ammo 값을 업데이트 하기 위해 HUD의 함수와 바인딩
+			Weapon->OnAmmoChanged.BindUObject(InHUDWidget, &UPFHUDWidget::UpdateAmmo);
+
+			// 조준 시 실행되는 HUD 함수와 바인딩
+			OnAimOn.BindUObject(InHUDWidget, &UPFHUDWidget::HideCrosshair, true);
+			// 조준 해제 시 실행되는 HUD 함수와 바인딩
+			OnAimOff.BindUObject(InHUDWidget, &UPFHUDWidget::HideCrosshair, false);
 		}
 	}
 }
@@ -301,11 +345,22 @@ void APFCharacterPlayer::AimOn()
 	{
 		ToggleSprint();
 	}
+
+	// OnAimOn 델리게이트와 바인딩 된 함수 실행
+	OnAimOn.ExecuteIfBound();
 }
 
 void APFCharacterPlayer::AimOff()
 {
 	bIsAiming = false;
+
+	// OnAimOff 델리게이트와 바인딩 된 함수 실행
+	OnAimOff.ExecuteIfBound();
+}
+
+void APFCharacterPlayer::Fire()
+{
+	Weapon->ConsumeBullet();
 }
 
 void APFCharacterPlayer::SetFOV(const float InTargetFOV)

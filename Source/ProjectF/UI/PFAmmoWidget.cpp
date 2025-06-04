@@ -14,11 +14,11 @@ void UPFAmmoWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	CurrentAmmo = Cast<UTextBlock>(GetWidgetFromName(TEXT("TxtCurrentAmmo")));
-	ensure(CurrentAmmo);
+	CurrentAmmoText = Cast<UTextBlock>(GetWidgetFromName(TEXT("TxtCurrentAmmo")));
+	ensure(CurrentAmmoText);
 	
-	MaxAmmo = Cast<UTextBlock>(GetWidgetFromName(TEXT("TxtMaxAmmo")));
-	ensure(MaxAmmo);
+	MaxAmmoText = Cast<UTextBlock>(GetWidgetFromName(TEXT("TxtMaxAmmo")));
+	ensure(MaxAmmoText);
 	
 	// 하고 싶은 것 : 캐릭터에 내 정보(위젯)을 전달
 	// 강참조를 피하기 위해 인터페이스를 통해 우회 전달 (느슨한 결합(참조))

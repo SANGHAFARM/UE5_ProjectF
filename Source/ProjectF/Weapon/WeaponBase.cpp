@@ -11,6 +11,24 @@ AWeaponBase::AWeaponBase()
 
 	WeaponMesh = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("WeaponMesh"));
 	SetRootComponent(WeaponMesh);
+
+	MaxAmmo = 40;
+	CurrentAmmo = MaxAmmo;
+}
+
+void AWeaponBase::ConsumeBullet()
+{
+	if (CurrentAmmo > 0)
+	{
+		CurrentAmmo--;
+	}
+	else
+	{
+		CurrentAmmo = 0;
+	}
+
+	// OnAmmoChanged 델리게이트와 바인딩 된 함수 실행
+	OnAmmoChanged.ExecuteIfBound(CurrentAmmo, MaxAmmo);
 }
 
 // Called when the game starts or when spawned
@@ -18,7 +36,6 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	MaxAmmo = 30;
 }
 
 // Called every frame

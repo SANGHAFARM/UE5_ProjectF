@@ -6,7 +6,10 @@
 #include "InputActionValue.h"
 #include "PFCharacterBase.h"
 #include "Components/TimelineComponent.h"
+#include "ProjectF/Interface/PFCharacterHUDInterface.h"
 #include "PFCharacterPlayer.generated.h"
+
+DECLARE_DELEGATE(FUIDelegate);
 
 class AWeaponBase;
 class UInputMappingContext;
@@ -16,18 +19,27 @@ class UCameraComponent;
  * 
  */
 UCLASS()
-class PROJECTF_API APFCharacterPlayer : public APFCharacterBase
+class PROJECTF_API APFCharacterPlayer : public APFCharacterBase, public IPFCharacterHUDInterface
 {
 	GENERATED_BODY()
 
 public:
 	APFCharacterPlayer();
+
+	// BeginPlay보다 이전에 실행되는 초기화 함수
+	virtual void PostInitializeComponents() override;
 	
 	virtual void BeginPlay() override;
 	
 	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
 
 	virtual void Tick(float DeltaSeconds) override;
+
+	// IPFCharacterHUDInterface 함수 구현
+	virtual void SetupHUDWidget(UPFHUDWidget* InHUDWidget) override;
+
+	FUIDelegate OnAimOn;
+	FUIDelegate OnAimOff;
 
 	// Getter
 public:
@@ -51,6 +63,7 @@ protected:
 	void ToggleSprint();
 	void AimOn();
 	void AimOff();
+	void Fire();
 
 	// 캐릭터
 protected:
@@ -105,6 +118,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Input)
 	TObjectPtr<UInputAction> AimAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	TObjectPtr<UInputAction> FireAction;
 	
 	// 달리기
 protected:
@@ -140,6 +156,9 @@ protected:
 
 	// 무기
 protected:
+	UPROPERTY(EditAnywhere, Category = Weapon)
+	TSubclassOf<AWeaponBase> WeaponClass = nullptr;
+	
 	UPROPERTY(EditAnywhere, Category = Weapon)
 	TObjectPtr<AWeaponBase> Weapon = nullptr;
 

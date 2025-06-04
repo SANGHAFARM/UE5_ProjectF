@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "PFAmmoWidget.h"
 #include "Blueprint/UserWidget.h"
 #include "PFHUDWidget.generated.h"
 
@@ -21,12 +22,14 @@ public:
 
 public:
 	void HideCrosshair(bool bSetHide);
+
+	void UpdateAmmo(uint32 CurrentAmmo, uint32 MaxAmmo);
 	
 protected:
 	// UMG가 초기화될 때 호출되는 함수
 	virtual void NativeConstruct() override;
 	
-protected:
+private:
 	// Crosshair 위젯
 	UPROPERTY()
 	TObjectPtr<UPFCrosshairWidget> CrosshairWidget;
