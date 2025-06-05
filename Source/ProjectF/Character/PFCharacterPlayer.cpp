@@ -128,6 +128,12 @@ void APFCharacterPlayer::PostInitializeComponents()
 		// Weapon을 CharacterArms의 ik_hand_gun 소켓에 Attach
 		Weapon->AttachToComponent(CharacterArms, FAttachmentTransformRules::SnapToTargetIncludingScale, TEXT("ik_hand_gun"));
 	}
+
+	// Character Arms의 AnimInstance를 참조 임시(Transient) 객체에 저장
+	if (CachedAnimInstance == nullptr && CharacterArms->GetAnimInstance())
+	{
+		CachedAnimInstance = CharacterArms->GetAnimInstance();
+	}
 }
 
 void APFCharacterPlayer::BeginPlay()
@@ -360,7 +366,16 @@ void APFCharacterPlayer::AimOff()
 
 void APFCharacterPlayer::Fire()
 {
-	Weapon->ConsumeBullet();
+	if (Weapon)
+	{
+		Weapon->ConsumeBullet();
+
+		if (CachedAnimInstance && Weapon->GetWeaponMontage())
+		{
+			// CharacterArms Mesh에서 Weapon에 저장된 무기 발사 Anim 재생
+			CachedAnimInstance->Montage_Play(Weapon->GetWeaponMontage());
+		}
+	}
 }
 
 void APFCharacterPlayer::SetFOV(const float InTargetFOV)

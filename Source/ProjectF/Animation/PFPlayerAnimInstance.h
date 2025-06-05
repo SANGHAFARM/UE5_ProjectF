@@ -24,21 +24,21 @@ protected:
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
 protected:
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = PFCharacter)
-	TObjectPtr<APFCharacterPlayer> PFCharacter;
+	UPROPERTY(Transient)
+	TWeakObjectPtr<APFCharacterPlayer> PFCharacter;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PFCharacter)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = PFCharacter)
 	uint8 bIsAiming : 1;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PFCharacter)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = PFCharacter)
 	uint8 bCloseToWall : 1;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PFCharacter)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = PFCharacter)
 	uint8 bIsSprint : 1;
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PFCharacter)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = PFCharacter)
 	float JumpVelocity;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = PFCharacter)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = PFCharacter)
 	FVector MouseSwayLocation;
 };

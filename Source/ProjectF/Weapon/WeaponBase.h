@@ -22,6 +22,7 @@ public:
 public:
 	FORCEINLINE uint32 GetCurrentAmmo() const { return CurrentAmmo; }
 	FORCEINLINE uint32 GetMaxAmmo() const { return CurrentAmmo; }
+	FORCEINLINE UAnimMontage* GetWeaponMontage() const { return WeaponMontage; }
 
 	void ConsumeBullet();
 
@@ -42,4 +43,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Weapon)
 	uint32 MaxAmmo;
+
+	// 무기별로 재생할 무기 AnimMontage
+	UPROPERTY(EditAnywhere, Category = Weapon)
+	TObjectPtr<UAnimMontage> WeaponMontage;
 };

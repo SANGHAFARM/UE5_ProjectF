@@ -22,7 +22,7 @@ void UPFPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 {
 	Super::NativeUpdateAnimation(DeltaSeconds);
 
-	if (PFCharacter)
+	if (PFCharacter.IsValid())
 	{
 		// 캐스팅한 PFCharacter로부터 값을 갱신
 		bIsAiming = PFCharacter->GetIsAiming();

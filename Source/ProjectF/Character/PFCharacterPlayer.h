@@ -68,11 +68,15 @@ protected:
 	// 캐릭터
 protected:
 	UPROPERTY(EditAnywhere, Category = Mesh)
-	USkeletalMeshComponent* CharacterArms;
+	TObjectPtr<USkeletalMeshComponent> CharacterArms;
 
 	// 캐릭터 Mesh 회전의 기준 축이 될 Pivot
 	UPROPERTY(EditAnywhere, Category = Pivot)
-	USceneComponent* Pivot;
+	TObjectPtr<USceneComponent> Pivot;
+
+	// AnimInstance를 참조하는 임시 객체
+	UPROPERTY(Transient)
+	TObjectPtr<UAnimInstance> CachedAnimInstance;
 
 	// 카메라
 protected:
@@ -128,7 +132,7 @@ protected:
 	uint8 bIsSprint : 1 = false;
 
 	UPROPERTY(EditAnywhere, Category = Sprint)
-	UCurveFloat* SprintFOVCurve;
+	TObjectPtr<UCurveFloat> SprintFOVCurve;
 
 	float DefaultMaxWalkSpeed;
 
@@ -137,7 +141,7 @@ protected:
 
 	// 앉기
 	UPROPERTY(EditAnywhere, Category = Crouch)
-	UCurveFloat* CrouchCurve;
+	TObjectPtr<UCurveFloat> CrouchCurve;
 
 	UPROPERTY(EditAnywhere, Category = Crouch)
 	float CrouchDuration = 0.3f;
