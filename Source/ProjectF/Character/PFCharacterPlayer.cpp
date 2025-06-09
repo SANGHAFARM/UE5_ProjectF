@@ -97,6 +97,12 @@ APFCharacterPlayer::APFCharacterPlayer()
 		FireAction = FireActionRef.Object;
 	}
 
+	static ConstructorHelpers::FObjectFinder<UInputAction> ReloadActionRef(TEXT("/Game/ProjectF/Input/Actions/IA_Reload.IA_Reload"));
+	if (ReloadActionRef.Object)
+	{
+		ReloadAction = ReloadActionRef.Object;
+	}
+
 	// 기준 달리기 속도 저장
 	DefaultMaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 
@@ -140,6 +146,11 @@ void APFCharacterPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 
+	if (EquipMontage && CharacterArms->GetAnimInstance())
+	{
+		CharacterArms->GetAnimInstance()->Montage_Play(EquipMontage);
+	}
+	
 	// 컨트롤러 가져오기
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	if (PlayerController)
@@ -166,14 +177,19 @@ void APFCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 	// InputAction과 함수 바인딩
 	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::Move);
+	EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Completed, this, &APFCharacterPlayer::MoveEnd);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::Look);
 	EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Completed, this, &APFCharacterPlayer::LookEnd);
-	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::Jump);
-	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::ToggleSprint);
-	EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::ToggleCrouch);
-	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::AimOn);
+	EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &APFCharacterPlayer::Jump);
+	EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &APFCharacterPlayer::ToggleSprint);
+	EnhancedInputComponent->BindAction(CrouchAction, ETriggerEvent::Started, this, &APFCharacterPlayer::ToggleCrouch);
+	
+	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Started, this, &APFCharacterPlayer::AimOn);
 	EnhancedInputComponent->BindAction(AimAction, ETriggerEvent::Completed, this, &APFCharacterPlayer::AimOff);
-	EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Triggered, this, &APFCharacterPlayer::Fire);
+	EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &APFCharacterPlayer::WeaponFireStart);
+	EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Completed, this, &APFCharacterPlayer::WeaponFireEnd);
+
+	EnhancedInputComponent->BindAction(ReloadAction, ETriggerEvent::Started, this, &APFCharacterPlayer::Reload);
 }
 
 void APFCharacterPlayer::Tick(float DeltaSeconds)
@@ -182,6 +198,7 @@ void APFCharacterPlayer::Tick(float DeltaSeconds)
 
 	if (bIsInterpolatingCrouch && CrouchCurve)
 	{
+		// 경과 시간을 누적하고 CrouchCurve에서 경과 시간에 일치하는 값으로 Height 값 업데이트
 		CrouchElapsedTime += DeltaSeconds;
 		float Alpha = FMath::Clamp(CrouchElapsedTime / CrouchDuration, 0.0f, 1.0f);
 
@@ -237,6 +254,8 @@ void APFCharacterPlayer::Tick(float DeltaSeconds)
 		if (bHit)
 		{
 			bCloseToWall = true;
+			// bCloseToWall 상태라면 Fire 중지
+			WeaponFireEnd();
 		}
 		else
 		{
@@ -280,6 +299,14 @@ void APFCharacterPlayer::Move(const FInputActionValue& Value)
 	// 무브먼트 컴포넌트에 값 전달
 	AddMovementInput(ForwardVector, Movement.X);
 	AddMovementInput(RightVector, Movement.Y);
+}
+
+void APFCharacterPlayer::MoveEnd()
+{
+	if (bIsSprint && GetCharacterMovement() && GetCharacterMovement()->Velocity.Size2D() < 3.0f)
+	{
+		ToggleSprint();
+	}
 }
 
 void APFCharacterPlayer::Look(const FInputActionValue& Value)
@@ -328,6 +355,11 @@ void APFCharacterPlayer::ToggleCrouch()
 
 void APFCharacterPlayer::ToggleSprint()
 {
+	if (bIsSprint == false && GetCharacterMovement() && GetCharacterMovement()->Velocity.Size2D() < 3.0f)
+	{
+		return;
+	}
+	
 	bIsSprint = !bIsSprint;
 	
 	// true면 달리기
@@ -364,17 +396,37 @@ void APFCharacterPlayer::AimOff()
 	OnAimOff.ExecuteIfBound();
 }
 
-void APFCharacterPlayer::Fire()
+void APFCharacterPlayer::WeaponFireStart()
+{
+	if (Weapon && CanFire())
+	{
+		Weapon->Fire();
+	}
+}
+
+void APFCharacterPlayer::WeaponFireEnd()
 {
 	if (Weapon)
 	{
-		Weapon->ConsumeBullet();
+		Weapon->FireEnd();
+	}
+}
 
-		if (CachedAnimInstance && Weapon->GetWeaponMontage())
-		{
-			// CharacterArms Mesh에서 Weapon에 저장된 무기 발사 Anim 재생
-			CachedAnimInstance->Montage_Play(Weapon->GetWeaponMontage());
-		}
+bool APFCharacterPlayer::CanFire() const
+{
+	if (bCloseToWall || bIsSprint)
+	{
+		return false;
+	}
+	
+	return true;
+}
+
+void APFCharacterPlayer::Reload()
+{
+	if (Weapon)
+	{
+		Weapon->ReloadStart();
 	}
 }
 
@@ -392,12 +444,20 @@ void APFCharacterPlayer::SetFOV(const float InTargetFOV)
 
 void APFCharacterPlayer::SprintOn()
 {
+	
+	
 	SetFOV(SprintFOV);
 
-	// 현재 앉기 상태라면 앉기 취소
+	// 현재 앉기 상태였다면 앉기 취소
 	if (bIsCrouched)
 	{
 		ToggleCrouch();
+	}
+
+	// 현재 Fire 중이었다면 Fire 중지  
+	if (Weapon->GetIsFiring())
+	{
+		WeaponFireEnd();
 	}
 	
 	// 달리기 속도 2배로 설정

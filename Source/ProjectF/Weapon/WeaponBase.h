@@ -6,7 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "WeaponBase.generated.h"
 
-DECLARE_DELEGATE_TwoParams(FOnAmmoChanged, uint32, uint32);
+class ABullet;
+DECLARE_DELEGATE_TwoParams(FOnAmmoChanged, uint32 /* CurrentAmmo */, uint32 /* MaxAmmo */);
 
 UCLASS()
 class PROJECTF_API AWeaponBase : public AActor
@@ -22,9 +23,14 @@ public:
 public:
 	FORCEINLINE uint32 GetCurrentAmmo() const { return CurrentAmmo; }
 	FORCEINLINE uint32 GetMaxAmmo() const { return CurrentAmmo; }
-	FORCEINLINE UAnimMontage* GetWeaponMontage() const { return WeaponMontage; }
+	FORCEINLINE bool GetIsFiring() const { return bIsFiring; }
+	FORCEINLINE bool GetIsReloading() const { return bIsFiring; }
 
-	void ConsumeBullet();
+	void Fire();
+	void FireEnd();
+
+	void ReloadStart();
+	void ReloadEnd();
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,8 +41,15 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+	// CharacterArms의 AnimInstance를 참조하는 임시 객체
+	UPROPERTY(Transient)
+	TObjectPtr<UAnimInstance> CachedCharacterArmsAnimInstance;
+	
 	UPROPERTY(EditAnywhere, Category = Weapon)
 	TObjectPtr<USkeletalMeshComponent> WeaponMesh;
+
+	UPROPERTY(EditAnywhere, Category = Weapon)
+	TObjectPtr<UStaticMeshComponent> MagazineMesh;
 
 	UPROPERTY(VisibleAnywhere, Category = Weapon)
 	uint32 CurrentAmmo;
@@ -44,7 +57,42 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Weapon)
 	uint32 MaxAmmo;
 
+	// AnimMontage
+protected:
 	// 무기별로 재생할 무기 AnimMontage
+	UPROPERTY(EditAnywhere, Category = Montage)
+	TObjectPtr<UAnimMontage> FireMontage;
+
+	// 캐릭터에서 재생되는 Reload 몽타주
+	UPROPERTY(EditAnywhere, Category = Montage)
+	TObjectPtr<UAnimMontage> CharacterReloadMontage;
+
+	// 무기에서 재생되는 Reload 몽타주
+	UPROPERTY(EditAnywhere, Category = Montage)
+	TObjectPtr<UAnimMontage> WeaponReloadMontage;
+	
+	// Fire
+protected:
 	UPROPERTY(EditAnywhere, Category = Weapon)
-	TObjectPtr<UAnimMontage> WeaponMontage;
+	TSubclassOf<ABullet> BulletClass;
+	
+	FTimerHandle FireTimerHandle;
+	float FireRate = 0.2f;
+
+	UPROPERTY(EditAnywhere, Category = Weapon)
+	TObjectPtr<UParticleSystem> MuzzleFlash;
+
+protected:
+	void ConsumeAmmo();
+	void SpawnBullet();
+	
+	// 델리게이트로 AmmoWidget의 Ammo 텍스트를 업데이트하는 함수
+	void UpdateAmmoHUD();
+
+	// bool
+protected:
+	// 발사 여부
+	uint8 bIsFiring : 1 = false;
+	// 재장전 여부
+	uint8 bIsReloading : 1 = false;
 };

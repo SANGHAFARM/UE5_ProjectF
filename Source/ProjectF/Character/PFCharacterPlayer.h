@@ -47,6 +47,7 @@ public:
 	FORCEINLINE bool GetCloseToWall() const { return bCloseToWall; }
 	FORCEINLINE bool GetIsSprint() const { return bIsSprint; }
 	FORCEINLINE FVector2D GetMouseInput() const { return MouseInput; }
+	FORCEINLINE USkeletalMeshComponent* GetCharacterArms() const { return CharacterArms; }
 
 	// 조작
 protected:
@@ -54,16 +55,24 @@ protected:
 	FVector2D MouseInput;
 	
 	void Move(const FInputActionValue& Value);
+	void MoveEnd();
 	void Look(const FInputActionValue& Value);
-	// 애니메이션에 Mouse 값을 넘겨주기 위해 LookAction에 바인딩할 Complete 함수
+	// AnimInstance에 Mouse 값을 넘겨주기 위해 LookAction에 바인딩할 Complete 함수
 	void LookEnd(const FInputActionValue& Value);
 	virtual void Jump() override;
+	
 	// 오버라이드된 Crouch()와 UnCrouch() 함수의 래핑 함수
 	void ToggleCrouch();
 	void ToggleSprint();
+	
 	void AimOn();
 	void AimOff();
-	void Fire();
+	
+	void WeaponFireStart();
+	void WeaponFireEnd();
+	bool CanFire() const;
+
+	void Reload();
 
 	// 캐릭터
 protected:
@@ -125,6 +134,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Input)
 	TObjectPtr<UInputAction> FireAction;
+
+	UPROPERTY(EditAnywhere, Category = Input)
+	TObjectPtr<UInputAction> ReloadAction;
 	
 	// 달리기
 protected:
@@ -160,6 +172,9 @@ protected:
 
 	// 무기
 protected:
+	UPROPERTY(EditAnywhere, Category = Weapon)
+	TObjectPtr<UAnimMontage> EquipMontage;
+	
 	UPROPERTY(EditAnywhere, Category = Weapon)
 	TSubclassOf<AWeaponBase> WeaponClass = nullptr;
 	
