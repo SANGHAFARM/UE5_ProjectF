@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "WeaponBase.generated.h"
 
+class APFCharacterPlayer;
 class ABullet;
 DECLARE_DELEGATE_TwoParams(FOnAmmoChanged, uint32 /* CurrentAmmo */, uint32 /* MaxAmmo */);
 
@@ -32,6 +33,9 @@ public:
 	void ReloadStart();
 	void ReloadEnd();
 
+	// Bullet에 바인딩 할 Delegate 함수
+	void BulletHitEnemy(AActor* HitActor);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -41,6 +45,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 protected:
+	// PFCharacterPlayer를 참조하는 임시 객체
+	UPROPERTY(Transient)
+	TObjectPtr<APFCharacterPlayer> CachedPFCharacter;
+	
 	// CharacterArms의 AnimInstance를 참조하는 임시 객체
 	UPROPERTY(Transient)
 	TObjectPtr<UAnimInstance> CachedCharacterArmsAnimInstance;

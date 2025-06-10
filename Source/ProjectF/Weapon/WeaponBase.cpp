@@ -6,6 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "ProjectF/Weapon/Bullet.h"
 #include "ProjectF/Character/PFCharacterPlayer.h"
+#include "ProjectF/Enemy/PFEnemy.h"
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -27,11 +28,13 @@ AWeaponBase::AWeaponBase()
 
 void AWeaponBase::Fire()
 {
+	// 재장전 중이라면 return
 	if (bIsReloading)
 	{
 		return;
 	}
 	
+	// Ammo가 0이라면 재장전 실행 후 리턴
 	if (CurrentAmmo <= 0)
 	{
 		ReloadStart();
@@ -69,6 +72,7 @@ void AWeaponBase::FireEnd()
 
 void AWeaponBase::ReloadStart()
 {
+	// 현재 Ammo가 전부 있다면 재장전을 할 필요가 없기 때문에 return
 	if (CurrentAmmo == MaxAmmo)
 	{
 		return;
@@ -99,15 +103,34 @@ void AWeaponBase::ReloadEnd()
 	UpdateAmmoHUD();
 }
 
+void AWeaponBase::BulletHitEnemy(AActor* HitActor)
+{
+	if (HitActor)
+	{
+		APFEnemy* PFEnemy = Cast<APFEnemy>(HitActor);
+		if (PFEnemy)
+		{
+			if (PFEnemy->GetIsDead())
+			{
+				CachedPFCharacter->NotifyHitMarker(true);
+			}
+			else
+			{
+				CachedPFCharacter->NotifyHitMarker(false);
+			}
+		}
+	}
+}
+
 // Called when the game starts or when spawned
 void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	APFCharacterPlayer* PFCharacter = Cast<APFCharacterPlayer>(GetOwner());
-	if (PFCharacter)
+	CachedPFCharacter = Cast<APFCharacterPlayer>(GetOwner());
+	if (CachedPFCharacter)
 	{
-		CachedCharacterArmsAnimInstance = PFCharacter->GetCharacterArms()->GetAnimInstance();
+		CachedCharacterArmsAnimInstance = CachedPFCharacter->GetCharacterArms()->GetAnimInstance();
 	}
 
 	MaxAmmo = 40;
@@ -119,10 +142,6 @@ void AWeaponBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bIsFiring)
-	{
-		
-	}
 }
 
 void AWeaponBase::ConsumeAmmo()
@@ -155,7 +174,12 @@ void AWeaponBase::SpawnBullet()
 		// Bullet 생성
 		if (GetWorld() && BulletClass)
 		{
-			GetWorld()->SpawnActor<ABullet>(BulletClass, SocketTransform, SpawnParams);
+			ABullet* SpawnedBullet = GetWorld()->SpawnActor<ABullet>(BulletClass, SocketTransform, SpawnParams);
+			if (SpawnedBullet)
+			{
+				// Bullet의 델리게이트에 Enemy를 Hit 시 실행할 WeaponBase의 BulletHitEnemy 함수 바인딩
+				SpawnedBullet->OnBulletHitEnemyDelegate.BindUObject(this, &AWeaponBase::BulletHitEnemy);
+			}
 		}
 	}
 }

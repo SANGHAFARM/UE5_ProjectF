@@ -19,6 +19,8 @@ public:
 	APFPlayerController();
 
 	virtual void BeginPlay() override;
+
+	FORCEINLINE UPFHUDWidget* GetPFHUDWidget() const { return PFHUDWidget; }
 	
 	// HUD Section
 protected:

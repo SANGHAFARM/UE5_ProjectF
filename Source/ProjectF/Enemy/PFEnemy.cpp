@@ -9,6 +9,13 @@
 APFEnemy::APFEnemy()
 {
 	MaxHP = 20.0f;
+}
+
+void APFEnemy::BeginPlay()
+{
+	Super::BeginPlay();
+
+	// 게임 시작 시 현재 HP를 최대로 설정
 	CurrentHP = MaxHP;
 }
 
@@ -30,6 +37,8 @@ float APFEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 	// 체력이 0 이하가 되면 사망 처리
 	if (CurrentHP <= 0.0f)
 	{
+		// Hitmarker를 위한 값 처리
+		bIsDead = true;
 		// 사망 처리 함수 호출
 		Die();
 	}

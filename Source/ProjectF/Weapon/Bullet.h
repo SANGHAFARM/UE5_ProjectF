@@ -6,6 +6,8 @@
 #include "GameFramework/Actor.h"
 #include "Bullet.generated.h"
 
+DECLARE_DELEGATE_OneParam(FOnBulletHitEnemyDelegate, AActor* /* HitActor */)
+
 class UProjectileMovementComponent;
 
 UCLASS()
@@ -17,6 +19,9 @@ public:
 	// Sets default values for this actor's properties
 	ABullet();
 
+	// WeaponBase의 함수와 바인딩 될 Delegate
+	FOnBulletHitEnemyDelegate OnBulletHitEnemyDelegate;
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -36,5 +41,5 @@ protected:
 	TObjectPtr<UProjectileMovementComponent> ProjectileMovementComponent;
 
 	UPROPERTY(EditAnywhere, Category = Bullet)
-	TObjectPtr<UParticleSystem> ImpactEffect;
+	TObjectPtr<UParticleSystem> HitEffect;
 };

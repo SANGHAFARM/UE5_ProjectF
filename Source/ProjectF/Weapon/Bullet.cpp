@@ -29,13 +29,11 @@ ABullet::ABullet()
 	// Overlap 이벤트를 실행하기 위해 활성화
 	//BulletMesh->SetGenerateOverlapEvents(true);
 
-
 	ProjectileMovementComponent = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("ProjectileMovementComponent"));
 	// ProjectileMovementComponent는 BulletMesh를 기준으로 움직임을 계산하고 다른 오브젝트와 충돌하는지를 감지하며 물리적 반응을 처리
 	ProjectileMovementComponent->UpdatedComponent = BulletMesh;
 	// Bullet 발사 속도
 	ProjectileMovementComponent->InitialSpeed = 10000.0f;
-	
 }
 
 // Called when the game starts or when spawned
@@ -59,6 +57,9 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 	if (OtherActor && GetInstigatorController())
 	{
 		UGameplayStatics::ApplyDamage(OtherActor, 20.0f, GetInstigatorController(), this, UDamageType::StaticClass());
+
+		// WeaponBase의 BulletHitEnemy 함수가 바인딩 되어 있으면 해당 함수 실행
+		OnBulletHitEnemyDelegate.ExecuteIfBound(OtherActor);
 	}
 
 	if (OtherComp)
@@ -67,8 +68,10 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 		FVector BulletDirection = GetVelocity();
 		float ForceStrength = 5.0f;
 
+		// OtherComp가 물리 시뮬레이션 중인지 확인
 		if (OtherComp->IsSimulatingPhysics())
 		{
+			// 힘을 가하기
 			OtherComp->AddImpulse(BulletDirection * ForceStrength, NAME_None, false);
 		}
 
@@ -91,9 +94,10 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 		// );
 	}
 
-	if (ImpactEffect && GetWorld())
+	// Hit 지점에 HitEffect 생성
+	if (HitEffect && GetWorld())
 	{
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), ImpactEffect, Hit.ImpactPoint, FRotator::ZeroRotator, FVector(0.2f));
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, Hit.ImpactPoint, FRotator::ZeroRotator, FVector(0.2f));
 	}
 	
 	// 3초 후 Destroy

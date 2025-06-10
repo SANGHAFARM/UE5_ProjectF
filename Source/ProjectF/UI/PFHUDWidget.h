@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "PFAmmoWidget.h"
 #include "Blueprint/UserWidget.h"
+#include "ProjectF/Interface/HitmarkerInterface.h"
 #include "PFHUDWidget.generated.h"
 
 class UPFCrosshairWidget;
@@ -13,7 +14,7 @@ class UPFAmmoWidget;
  * 
  */
 UCLASS()
-class PROJECTF_API UPFHUDWidget : public UUserWidget
+class PROJECTF_API UPFHUDWidget : public UUserWidget, public IHitmarkerInterface
 {
 	GENERATED_BODY()
 

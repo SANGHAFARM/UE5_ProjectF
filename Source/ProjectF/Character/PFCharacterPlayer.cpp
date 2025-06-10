@@ -9,6 +9,7 @@
 #include "InputMappingContext.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "ProjectF/Player/PFPlayerController.h"
 #include "ProjectF/UI/PFHUDWidget.h"
 #include "ProjectF/Weapon/WeaponBase.h"
 
@@ -283,6 +284,20 @@ void APFCharacterPlayer::SetupHUDWidget(UPFHUDWidget* InHUDWidget)
 	}
 }
 
+void APFCharacterPlayer::NotifyHitMarker(bool bIsDead)
+{
+	APFPlayerController* PFPlayerController = Cast<APFPlayerController>(GetController());
+	if (PFPlayerController)
+	{
+		UPFHUDWidget* PFHUDWidget = Cast<UPFHUDWidget>(PFPlayerController->GetPFHUDWidget());
+		if (PFHUDWidget)
+		{
+			// BlueprintImplementableEvent이기 때문에 Execute_로 실행
+			IHitmarkerInterface::Execute_ShowHitmarker(PFHUDWidget, bIsDead);
+		}
+	}
+}
+
 void APFCharacterPlayer::Move(const FInputActionValue& Value)
 {
 	// 입력 값 읽기
@@ -303,6 +318,7 @@ void APFCharacterPlayer::Move(const FInputActionValue& Value)
 
 void APFCharacterPlayer::MoveEnd()
 {
+	// 달리는 중이지만 이동 속도가 3.0f 미만이면 달리기 종료
 	if (bIsSprint && GetCharacterMovement() && GetCharacterMovement()->Velocity.Size2D() < 3.0f)
 	{
 		ToggleSprint();
@@ -414,6 +430,7 @@ void APFCharacterPlayer::WeaponFireEnd()
 
 bool APFCharacterPlayer::CanFire() const
 {
+	// 벽에 붙어 있거나 달리는 중이라면 return false
 	if (bCloseToWall || bIsSprint)
 	{
 		return false;
@@ -444,8 +461,6 @@ void APFCharacterPlayer::SetFOV(const float InTargetFOV)
 
 void APFCharacterPlayer::SprintOn()
 {
-	
-	
 	SetFOV(SprintFOV);
 
 	// 현재 앉기 상태였다면 앉기 취소

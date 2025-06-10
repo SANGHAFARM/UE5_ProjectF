@@ -15,6 +15,7 @@ class AWeaponBase;
 class UInputMappingContext;
 class UInputAction;
 class UCameraComponent;
+class IHitmarkerInterface;
 /**
  * 
  */
@@ -37,6 +38,9 @@ public:
 
 	// IPFCharacterHUDInterface 함수 구현
 	virtual void SetupHUDWidget(UPFHUDWidget* InHUDWidget) override;
+
+	// IHitmarkerInterface를 통해 HUDWidget에 Hitmarker 정보를 알릴 함수
+	void NotifyHitMarker(bool bIsDead);
 
 	FUIDelegate OnAimOn;
 	FUIDelegate OnAimOff;

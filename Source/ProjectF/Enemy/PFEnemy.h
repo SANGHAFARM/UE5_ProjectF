@@ -19,6 +19,10 @@ class PROJECTF_API APFEnemy : public APFCharacterBase
 public:
 	APFEnemy();
 
+	virtual void BeginPlay() override;
+
+	bool GetIsDead() const { return bIsDead; }
+	
 protected:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
@@ -34,4 +38,6 @@ protected:
 protected:
 	FTimerHandle DeathTimerHandle;
 	float DeathTime = 3.0f;
+
+	uint8 bIsDead : 1 = false;
 };
