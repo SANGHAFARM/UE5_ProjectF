@@ -9,9 +9,9 @@
 #include "InputMappingContext.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "ProjectF/Player/PFPlayerController.h"
-#include "ProjectF/UI/PFHUDWidget.h"
-#include "ProjectF/Weapon/WeaponBase.h"
+#include "Player/PFPlayerController.h"
+#include "UI/PFHUDWidget.h"
+#include "Weapon/WeaponBase.h"
 
 APFCharacterPlayer::APFCharacterPlayer()
 {
@@ -284,7 +284,7 @@ void APFCharacterPlayer::SetupHUDWidget(UPFHUDWidget* InHUDWidget)
 	}
 }
 
-void APFCharacterPlayer::NotifyHitMarker(bool bIsDead)
+void APFCharacterPlayer::NotifyHitmarker(bool bIsDead)
 {
 	APFPlayerController* PFPlayerController = Cast<APFPlayerController>(GetController());
 	if (PFPlayerController)
@@ -319,7 +319,7 @@ void APFCharacterPlayer::Move(const FInputActionValue& Value)
 void APFCharacterPlayer::MoveEnd()
 {
 	// 달리는 중이지만 이동 속도가 3.0f 미만이면 달리기 종료
-	if (bIsSprint && GetCharacterMovement() && GetCharacterMovement()->Velocity.Size2D() < 3.0f)
+	if (bIsSprint)
 	{
 		ToggleSprint();
 	}

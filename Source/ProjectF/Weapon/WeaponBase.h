@@ -83,7 +83,8 @@ protected:
 protected:
 	UPROPERTY(EditAnywhere, Category = Weapon)
 	TSubclassOf<ABullet> BulletClass;
-	
+
+	// 연사 속도 관리
 	FTimerHandle FireTimerHandle;
 	float FireRate = 0.2f;
 

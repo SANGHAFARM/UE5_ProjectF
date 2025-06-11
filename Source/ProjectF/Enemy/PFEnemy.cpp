@@ -5,9 +5,13 @@
 
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "AI/PFAIController.h"
 
 APFEnemy::APFEnemy()
 {
+	AIControllerClass = APFAIController::StaticClass();
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+	
 	MaxHP = 20.0f;
 }
 
@@ -81,4 +85,14 @@ void APFEnemy::Die()
 
 	// 5초 후에 파괴
 	SetLifeSpan(5.0f);
+}
+
+float APFEnemy::GetAIAttackRange()
+{
+	return 50.0f;
+}
+
+float APFEnemy::GetAITurnSpeed()
+{
+	return 10.0f;
 }

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interface/PFEnemyAIInterface.h"
 #include "ProjectF/Character/PFCharacterBase.h"
 #include "PFEnemy.generated.h"
 
@@ -12,7 +13,7 @@ class AController;
  * 
  */
 UCLASS()
-class PROJECTF_API APFEnemy : public APFCharacterBase
+class PROJECTF_API APFEnemy : public APFCharacterBase, public IPFEnemyAIInterface
 {
 	GENERATED_BODY()
 
@@ -40,4 +41,9 @@ protected:
 	float DeathTime = 3.0f;
 
 	uint8 bIsDead : 1 = false;
+
+	// AI
+protected:
+	virtual float GetAIAttackRange() override;
+	virtual float GetAITurnSpeed() override;
 };

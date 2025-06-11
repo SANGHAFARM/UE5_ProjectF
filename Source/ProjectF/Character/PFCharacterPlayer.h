@@ -6,7 +6,7 @@
 #include "InputActionValue.h"
 #include "PFCharacterBase.h"
 #include "Components/TimelineComponent.h"
-#include "ProjectF/Interface/PFCharacterHUDInterface.h"
+#include "Interface/PFCharacterHUDInterface.h"
 #include "PFCharacterPlayer.generated.h"
 
 DECLARE_DELEGATE(FUIDelegate);
@@ -40,7 +40,7 @@ public:
 	virtual void SetupHUDWidget(UPFHUDWidget* InHUDWidget) override;
 
 	// IHitmarkerInterface를 통해 HUDWidget에 Hitmarker 정보를 알릴 함수
-	void NotifyHitMarker(bool bIsDead);
+	void NotifyHitmarker(bool bIsDead);
 
 	FUIDelegate OnAimOn;
 	FUIDelegate OnAimOff;

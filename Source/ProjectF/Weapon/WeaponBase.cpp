@@ -4,9 +4,9 @@
 #include "WeaponBase.h"
 
 #include "Kismet/GameplayStatics.h"
-#include "ProjectF/Weapon/Bullet.h"
-#include "ProjectF/Character/PFCharacterPlayer.h"
-#include "ProjectF/Enemy/PFEnemy.h"
+#include "Weapon/Bullet.h"
+#include "Character/PFCharacterPlayer.h"
+#include "Enemy/PFEnemy.h"
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -105,18 +105,21 @@ void AWeaponBase::ReloadEnd()
 
 void AWeaponBase::BulletHitEnemy(AActor* HitActor)
 {
+	// HitActor가 유효한지 체크
 	if (HitActor)
 	{
+		// HitActor가 유효하면 PFEnemy로 캐스팅이 되는지 확인
 		APFEnemy* PFEnemy = Cast<APFEnemy>(HitActor);
 		if (PFEnemy)
 		{
+			// PFEnemy로 캐스팅에 성공하면 PFEnemy의 bIsDead 상태를 PFCharacter의 함수로 넘김
 			if (PFEnemy->GetIsDead())
 			{
-				CachedPFCharacter->NotifyHitMarker(true);
+				CachedPFCharacter->NotifyHitmarker(true);
 			}
 			else
 			{
-				CachedPFCharacter->NotifyHitMarker(false);
+				CachedPFCharacter->NotifyHitmarker(false);
 			}
 		}
 	}
