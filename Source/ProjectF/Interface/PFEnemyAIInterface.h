@@ -13,6 +13,7 @@ class UPFEnemyAIInterface : public UInterface
 	GENERATED_BODY()
 };
 
+DECLARE_DELEGATE(FAIAttackFinishedDelegate);
 /**
  * 
  */
@@ -24,4 +25,7 @@ class PROJECTF_API IPFEnemyAIInterface
 public:
 	virtual float GetAIAttackRange() = 0;
 	virtual float GetAITurnSpeed() = 0;
+
+	virtual void SetAIAttackDelegate(const FAIAttackFinishedDelegate& InOnAttackFinished) = 0;
+	virtual void AttackByAI() = 0;
 };

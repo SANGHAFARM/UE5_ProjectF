@@ -6,11 +6,26 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AI/PFAIController.h"
+#include "Components/SphereComponent.h"
 
 APFEnemy::APFEnemy()
 {
 	AIControllerClass = APFAIController::StaticClass();
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+
+	RightHandCollision = CreateDefaultSubobject<USphereComponent>(TEXT("RightHandCollision"));
+	RightHandCollision->SetupAttachment(GetMesh(), TEXT("hand_r"));
+
+	LeftHandCollision = CreateDefaultSubobject<USphereComponent>(TEXT("LeftHandCollision"));
+	LeftHandCollision->SetupAttachment(GetMesh(), TEXT("hand_l"));
+	
+	// Enemy의 회전을 컨트롤러의 회전에 따르지 않도록 설정
+	bUseControllerRotationYaw = false;
+
+	// Enemy의 이동 방향에 따라 회전하도록 설정
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+	GetCharacterMovement()->RotationRate = FRotator(0.f, 720.f, 0.f);
+	GetCharacterMovement()->MaxWalkSpeed = 300.0f;
 	
 	MaxHP = 20.0f;
 }
@@ -18,9 +33,10 @@ APFEnemy::APFEnemy()
 void APFEnemy::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	// 게임 시작 시 현재 HP를 최대로 설정
 	CurrentHP = MaxHP;
+	
 }
 
 float APFEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser)
@@ -87,12 +103,66 @@ void APFEnemy::Die()
 	SetLifeSpan(5.0f);
 }
 
+void APFEnemy::EnableAttackCollision(FName InSectionName)
+{
+	if (InSectionName == TEXT("RightAttack"))
+	{
+		
+	}
+	else if (InSectionName == TEXT("LeftAttack"))
+	{
+		
+	}
+}
+
+void APFEnemy::DisableAttackCollision(FName InSectionName)
+{
+	if (InSectionName == TEXT("RightAttack"))
+	{
+		
+	}
+	else if (InSectionName == TEXT("LeftAttack"))
+	{
+		
+	}
+}
+
+void APFEnemy::OnAttackTaskEnd()
+{
+	OnAttackFinished.ExecuteIfBound();
+}
+
 float APFEnemy::GetAIAttackRange()
 {
-	return 50.0f;
+	return 150.0f;
 }
 
 float APFEnemy::GetAITurnSpeed()
 {
 	return 10.0f;
+}
+
+void APFEnemy::SetAIAttackDelegate(const FAIAttackFinishedDelegate& InOnAttackFinished)
+{
+	OnAttackFinished = InOnAttackFinished;
+}
+
+void APFEnemy::AttackByAI()
+{
+	bIsAttacking = true;
+
+	uint8 RandomSection = FMath::RandRange(0, 1);
+	FName SectionName = (RandomSection == 0) ? TEXT("RightAttack") : TEXT("LeftAttack");
+
+	UAnimInstance* AnimInstance = GetMesh()->GetAnimInstance();
+	if (AnimInstance == nullptr)
+	{
+		return;
+	}
+
+	if (AttackMontage)
+	{
+		AnimInstance->Montage_Play(AttackMontage);
+		AnimInstance->Montage_JumpToSection(SectionName, AttackMontage);
+	}
 }
