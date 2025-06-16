@@ -9,13 +9,20 @@
 #include "Interface/PFCharacterHUDInterface.h"
 #include "PFCharacterPlayer.generated.h"
 
-DECLARE_DELEGATE(FUIDelegate);
+DECLARE_DELEGATE_OneParam(FCrosshairSetHideDelegate, bool);
+DECLARE_DELEGATE_OneParam(FCrosshairColorDelegate, FLinearColor);
+DECLARE_DELEGATE_OneParam(FShowHitmarkerDelegate, bool);
 
+
+class USpringArmComponent;
 class AWeaponBase;
 class UInputMappingContext;
 class UInputAction;
 class UCameraComponent;
-class IHitmarkerInterface;
+class ICrosshairInterface;
+class USpotLightComponent;
+class USphereComponent;
+class UPaperSpriteComponent;
 /**
  * 
  */
@@ -27,6 +34,18 @@ class PROJECTF_API APFCharacterPlayer : public APFCharacterBase, public IPFChara
 public:
 	APFCharacterPlayer();
 
+	// ICrosshairInterface를 통해 HUDWidget에 Hitmarker 정보를 알릴 함수
+	void NotifyHitmarker(bool bIsDead);
+
+	// Getter
+public:
+	FORCEINLINE bool GetIsAiming() const { return bIsAiming; }
+	FORCEINLINE bool GetCloseToWall() const { return bCloseToWall; }
+	FORCEINLINE bool GetIsSprint() const { return bIsSprint; }
+	FORCEINLINE FVector2D GetMouseInput() const { return MouseInput; }
+	FORCEINLINE USkeletalMeshComponent* GetCharacterArms() const { return CharacterArms; }
+	
+protected:
 	// BeginPlay보다 이전에 실행되는 초기화 함수
 	virtual void PostInitializeComponents() override;
 	
@@ -36,23 +55,20 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
+	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
 	// IPFCharacterHUDInterface 함수 구현
 	virtual void SetupHUDWidget(UPFHUDWidget* InHUDWidget) override;
 
-	// IHitmarkerInterface를 통해 HUDWidget에 Hitmarker 정보를 알릴 함수
-	void NotifyHitmarker(bool bIsDead);
+	// Crosshair HUD 관련
+	FCrosshairSetHideDelegate OnCrosshairSetHide;
+	
+	FCrosshairColorDelegate OnChangeCrosshairColor;
+	uint8 bCurrentFrameOnEnemy : 1 = false;
+	uint8 bLastFrameOnEnemy : 1 = false;
 
-	FUIDelegate OnAimOn;
-	FUIDelegate OnAimOff;
-
-	// Getter
-public:
-	FORCEINLINE bool GetIsAiming() const { return bIsAiming; }
-	FORCEINLINE bool GetCloseToWall() const { return bCloseToWall; }
-	FORCEINLINE bool GetIsSprint() const { return bIsSprint; }
-	FORCEINLINE FVector2D GetMouseInput() const { return MouseInput; }
-	FORCEINLINE USkeletalMeshComponent* GetCharacterArms() const { return CharacterArms; }
-
+	FShowHitmarkerDelegate OnShowHitmarker;
+	
 	// 조작
 protected:
 	// 애니메이션에 쓰기 위해 마우스 입력 값 저장
@@ -91,6 +107,16 @@ protected:
 	UPROPERTY(Transient)
 	TObjectPtr<UAnimInstance> CachedAnimInstance;
 
+	// 피격 시 슬로우
+protected:
+	UPROPERTY(EditAnywhere, Category = HitDilation)
+	float HitDilationInterpSpeed = 1.0f;
+	
+	float HitDilationTime;
+	bool bIsInterpolatingHitTimeDilation : 1 = false;
+	
+	void HitDilation();
+	
 	// 카메라
 protected:
 	UPROPERTY(EditAnywhere, Category = Camera)
@@ -186,4 +212,31 @@ protected:
 	TObjectPtr<AWeaponBase> Weapon = nullptr;
 
 	uint8 bIsAiming : 1 = false;
+
+	// 시야
+protected:
+	UPROPERTY(EditAnywhere, Category = Sight)
+	TObjectPtr<USpotLightComponent> SpotLight;
+
+	UPROPERTY(EditAnywhere, Category = Sight)
+	TObjectPtr<USphereComponent> SightRadius;
+
+	UPROPERTY(EditAnywhere, Category = Sight)
+	TObjectPtr<USphereComponent> EnemySpawnRadius;
+
+	// 미니맵
+protected:
+	UPROPERTY(EditAnywhere, Category = Minimap)
+	TObjectPtr<USpringArmComponent> MinimapArm; 
+
+	UPROPERTY(EditAnywhere, Category = Minimap)
+	TObjectPtr<USceneCaptureComponent2D> MinimapSceneCapture;
+	
+	// 아이콘
+protected:
+	UPROPERTY(EditAnywhere, Category = Icon)
+	TObjectPtr<UPaperSpriteComponent> PlayerIcon;
+
+	UPROPERTY(EditAnywhere, Category = Icon)
+	TObjectPtr<UPaperSpriteComponent> PlayerSight;
 };

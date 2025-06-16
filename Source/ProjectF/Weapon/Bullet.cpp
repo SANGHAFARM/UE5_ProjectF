@@ -47,8 +47,8 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 {
 	// 1. OtherActor가 nullptr인지 확인
 	// 2. OtherActor가 Owner(Weapon)인지 확인
-	// 3. OtherActor가 Instigator(Weapon을 소유한 캐릭터)인지 확인
-	if (OtherActor == nullptr || OtherActor == GetOwner() || GetInstigator() && OtherActor == GetInstigator())
+	// 3. OtherActor의 Instigator가 Weapon의 Instigator인지 확인
+	if (OtherActor == nullptr || OtherActor == GetOwner() || GetInstigator() == OtherActor->GetInstigator())
 	{
 		Destroy();
 		return;

@@ -32,6 +32,11 @@ void UPFHUDWidget::UpdateAmmo(uint32 CurrentAmmo, uint32 MaxAmmo)
 	AmmoWidget->SetMaxAmmoText(MaxAmmo);
 }
 
+void UPFHUDWidget::ChangeCrosshairColor(FLinearColor InColor)
+{
+	CrosshairWidget->SetColorAndOpacity(InColor); 
+}
+
 void UPFHUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();

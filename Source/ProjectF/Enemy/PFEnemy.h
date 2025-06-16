@@ -8,6 +8,7 @@
 #include "ProjectF/Character/PFCharacterBase.h"
 #include "PFEnemy.generated.h"
 
+class UPaperSpriteComponent;
 class USphereComponent;
 struct FDamageEvent;
 class AController;
@@ -26,16 +27,22 @@ public:
 	
 protected:
 	virtual void BeginPlay() override;
+
+	virtual void Tick(float DeltaSeconds) override;
 	
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
+	void CheckHP(float InDamage);
 	void Die();
 
 	// IPFEnemyAnimationInterface에서 오버라이딩한 가상 함수
 	virtual void EnableAttackCollision(FName InSectionName) override;
 	virtual void DisableAttackCollision(FName InSectionName) override;
 	virtual void OnAttackTaskEnd() override;
+
+	UFUNCTION()
+	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
 protected:
 	UPROPERTY(EditAnywhere, Category = Enemy)
@@ -43,6 +50,15 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = Enemy)
 	float MaxHP;
+
+	// 피격 경직
+protected:
+	UPROPERTY(EditAnywhere, Category = SpeedRecovery)
+	float SpeedRecoveryInterpSpeed = 1.0f;
+
+	float CurrentSpeed;
+	float DefaultMaxWalkSpeed;
+	uint8 bIsInterpolatingSpeedRecovery : 1 = false;
 
 protected:
 	UPROPERTY(EditAnywhere, Category = Attack)
@@ -61,8 +77,9 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Attack)
 	TObjectPtr<USphereComponent> LeftHandCollision;
 
-	// AI
+	// AI 
 protected:
+	// IPFEnemyAIInterface에서 오버라이딩한 가상 함수들
 	virtual float GetAIAttackRange() override;
 	virtual float GetAITurnSpeed() override;
 
@@ -70,4 +87,9 @@ protected:
 	virtual void AttackByAI() override;
 
 	FAIAttackFinishedDelegate OnAttackFinished;
+
+	// 아이콘
+protected:
+	UPROPERTY(EditAnywhere, Category = Icon)
+	TObjectPtr<UPaperSpriteComponent> EnemyIcon;
 };

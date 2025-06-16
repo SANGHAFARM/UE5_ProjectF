@@ -2,13 +2,21 @@
 
 
 #include "PFCharacterPlayer.h"
+#include "PFCharacterPlayer.h"
 
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputMappingContext.h"
+#include "PaperSpriteComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Components/SceneCaptureComponent2D.h"
+#include "Components/SphereComponent.h"
+#include "Components/SpotLightComponent.h"
+#include "Enemy/PFEnemy.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Player/PFPlayerController.h"
 #include "UI/PFHUDWidget.h"
 #include "Weapon/WeaponBase.h"
@@ -30,7 +38,7 @@ APFCharacterPlayer::APFCharacterPlayer()
 	// Pivot에 붙여서 Pitch 회전에 따라 Mesh를 회전시키기 위해 사용할 진짜 Mesh
 	CharacterArms = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("CharacterArms"));
 	CharacterArms->SetupAttachment(Pivot);
-	CharacterArms->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -160.0f), FRotator(0.0f, 0.0f, -90.0f));
+	CharacterArms->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -160.0f), FRotator(0.0f, -90.0f, 0.0f));
 	
 	// Camera
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
@@ -38,7 +46,7 @@ APFCharacterPlayer::APFCharacterPlayer()
 	// 카메라의 회전이 컨트롤러(폰)의 회전을 따르도록 설정
 	Camera->bUsePawnControlRotation = true;
 	// 카메라의 위치를 1인칭에 맞게 캐릭터의 머리 위치로 설정
-	Camera->SetRelativeRotation(FRotator(-90.0f, 0.0f, 90.0f));
+	Camera->SetRelativeRotation(FRotator(0.0f, -90.0f, 90.0f));
 	
 	// 캐릭터는 항상 컨트롤러의 Yaw 회전 값을 따르도록 설정
 	bUseControllerRotationPitch = false;
@@ -48,6 +56,77 @@ APFCharacterPlayer::APFCharacterPlayer()
 	// 컨트롤러의 Yaw 회전 값을 따르기 때문에
 	// 캐릭터가 움직이는 방향으로 자연스럽게 회전할지 여부는 false로 설정
 	GetCharacterMovement()->bOrientRotationToMovement = false;
+
+	// Sight
+	SpotLight = CreateDefaultSubobject<USpotLightComponent>(TEXT("SpotLight"));
+	SpotLight->SetupAttachment(GetRootComponent());
+	SpotLight->SetMobility(EComponentMobility::Movable);
+	SpotLight->SetRelativeLocation(FVector(0.0f, 0.0f, 1200.0f));
+	SpotLight->SetRelativeRotation(FRotator(-90.0f, 0.0f, 0.0f));
+
+	SpotLight->SetIntensity(20.0f);
+	SpotLight->SetIntensityUnits(ELightUnits::Candelas);
+	SpotLight->SetAttenuationRadius(2000.0f);
+
+	SightRadius = CreateDefaultSubobject<USphereComponent>(TEXT("SightRadius"));
+	SightRadius->SetupAttachment(GetRootComponent());
+	SightRadius->SetMobility(EComponentMobility::Movable);
+	SightRadius->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
+	SightRadius->SetSphereRadius(1400.0f);
+	SightRadius->SetCollisionProfileName(TEXT("NoCollision"));
+
+	EnemySpawnRadius = CreateDefaultSubobject<USphereComponent>(TEXT("EnemySpawnRadius"));
+	EnemySpawnRadius->SetupAttachment(GetRootComponent());
+	EnemySpawnRadius->SetMobility(EComponentMobility::Movable);
+	EnemySpawnRadius->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
+	EnemySpawnRadius->SetSphereRadius(2400.0f);
+	EnemySpawnRadius->SetCollisionProfileName(TEXT("NoCollision"));
+
+	// Minimap
+	MinimapArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("MinimapArm"));
+	MinimapArm->SetupAttachment(GetRootComponent());
+	MinimapArm->TargetArmLength = 600.0f;
+	MinimapArm->SetRelativeRotation(FRotator(-90.0f, 0.0f, 0.0f));
+	MinimapArm->bDoCollisionTest = false;
+	MinimapArm->bInheritPitch = false;
+	MinimapArm->bInheritRoll = false;
+	MinimapArm->bInheritYaw = false;
+	
+	MinimapSceneCapture = CreateDefaultSubobject<USceneCaptureComponent2D>(TEXT("MinimapSceneCapture"));
+	MinimapSceneCapture->SetupAttachment(MinimapArm);
+	MinimapSceneCapture->ProjectionType = ECameraProjectionMode::Orthographic;
+	MinimapSceneCapture->OrthoWidth = 3000.0f;
+
+	// Icon
+	PlayerIcon = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("PlayerIcon"));
+	PlayerIcon->SetupAttachment(GetRootComponent());
+	PlayerIcon->SetRelativeLocation(FVector(0.0f, 0.0f, 200.0f));
+	PlayerIcon->SetRelativeRotation(FRotator(0.0f, 90.0f, -90.0f));
+	PlayerIcon->SetRelativeScale3D(FVector(0.2));
+	PlayerIcon->SetEnableGravity(false);
+	PlayerIcon->bApplyImpulseOnDamage = false;
+	PlayerIcon->bReplicatePhysicsToAutonomousProxy = false;
+	PlayerIcon->SetGenerateOverlapEvents(false);
+	PlayerIcon->bVisibleInReflectionCaptures = false;
+	PlayerIcon->bVisibleInRealTimeSkyCaptures = false;
+	PlayerIcon->bVisibleInRayTracing = false;
+	PlayerIcon->TranslucencySortPriority = 1;
+	PlayerIcon->SetVisibleInSceneCaptureOnly(true);
+
+	PlayerSight = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("PlayerSight"));
+	PlayerSight->SetupAttachment(PlayerIcon);
+	PlayerSight->SetRelativeLocation(FVector(0.0f, -150.0f, 4300.0f));
+	PlayerSight->SetRelativeRotation(FRotator(0.0f, 0.0f, 180.0f));
+	PlayerSight->SetRelativeScale3D(FVector(7.0f, 1.0f, 7.0f));
+	PlayerSight->SetEnableGravity(false);
+	PlayerSight->bApplyImpulseOnDamage = false;
+	PlayerSight->bReplicatePhysicsToAutonomousProxy = false;
+	PlayerSight->SetGenerateOverlapEvents(false);
+	PlayerSight->bVisibleInReflectionCaptures = false;
+	PlayerSight->bVisibleInRealTimeSkyCaptures = false;
+	PlayerSight->bVisibleInRayTracing = false;
+	PlayerSight->TranslucencySortPriority = -1;
+	PlayerSight->SetVisibleInSceneCaptureOnly(true);
 	
 	// 입력
 	static ConstructorHelpers::FObjectFinder<UInputMappingContext> DefaultMappingContextRef(TEXT("/Game/ProjectF/Input/IMC_Default.IMC_Default"));
@@ -119,6 +198,11 @@ APFCharacterPlayer::APFCharacterPlayer()
 	GetCharacterMovement()->SetCrouchedHalfHeight(DefaultCapsuleHalfHeight / 2);
 }
 
+void APFCharacterPlayer::NotifyHitmarker(bool bIsDead)
+{
+	OnShowHitmarker.ExecuteIfBound(bIsDead);
+}
+
 void APFCharacterPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -146,7 +230,7 @@ void APFCharacterPlayer::PostInitializeComponents()
 void APFCharacterPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	if (EquipMontage && CharacterArms->GetAnimInstance())
 	{
 		CharacterArms->GetAnimInstance()->Montage_Play(EquipMontage);
@@ -197,6 +281,7 @@ void APFCharacterPlayer::Tick(float DeltaSeconds)
 {
 	Super::Tick(DeltaSeconds);
 
+	// Crouch 시 위치 보간
 	if (bIsInterpolatingCrouch && CrouchCurve)
 	{
 		// 경과 시간을 누적하고 CrouchCurve에서 경과 시간에 일치하는 값으로 Height 값 업데이트
@@ -220,6 +305,7 @@ void APFCharacterPlayer::Tick(float DeltaSeconds)
 		}
 	}
 
+	// Sprint 시 FOV 보간
 	if (bIsInterpolatingFOV && SprintFOVCurve)
 	{
 		// 경과 시간을 누적하고 FOVCurve에서 경과 시간에 일치하는 값으로 FOV를 업데이트
@@ -238,6 +324,20 @@ void APFCharacterPlayer::Tick(float DeltaSeconds)
 		}
 	}
 
+	// 적으로부터 피격 시 Time Dilation 느리게 설정
+	// TakeDamage 함수에서 bIsInterpolatingHitTimeDilation 값을 true로 설정
+	if (bIsInterpolatingHitTimeDilation && GetWorld())
+	{
+		HitDilationTime = FMath::FInterpTo(HitDilationTime, 1.0f, DeltaSeconds, HitDilationInterpSpeed); // 2.0f는 보간 속도
+		
+		UGameplayStatics::SetGlobalTimeDilation(GetWorld(), HitDilationTime);
+		
+		if (HitDilationTime >= 1.0f)
+		{
+			bIsInterpolatingHitTimeDilation = false;
+		}
+	}
+
 	if (Controller && Pivot)
 	{
 		// Mesh를 Controller의 Pitch와 일치
@@ -246,13 +346,13 @@ void APFCharacterPlayer::Tick(float DeltaSeconds)
 
 	if (Camera)
 	{
-		FHitResult HitResult;
+		FHitResult HitWallResult;
 		FVector Start = Camera->GetComponentLocation();
-		FVector End = Start + Camera->GetForwardVector() * 100.0f;
+		FVector ToWall = Start + Camera->GetForwardVector() * 100.0f;
 		
 		// 카메라로부터 카메라 전방 벡터 방향의 End 지점 사이에 물체 유무 확인 LineTrace
-		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility);
-		if (bHit)
+		bool bHitWall = GetWorld()->LineTraceSingleByChannel(HitWallResult, Start, ToWall, ECC_Visibility);
+		if (bHitWall)
 		{
 			bCloseToWall = true;
 			// bCloseToWall 상태라면 Fire 중지
@@ -262,7 +362,49 @@ void APFCharacterPlayer::Tick(float DeltaSeconds)
 		{
 			bCloseToWall = false;
 		}
+
+		FHitResult HitResult;
+		FVector End = Start + Camera->GetForwardVector() * 10000.0f;
+		
+		bCurrentFrameOnEnemy = false;
+
+		// 크로스헤어 색상 변경을 위한 LineTrace
+		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility);
+		if (bHit)
+		{
+			APFEnemy* Enemy = Cast<APFEnemy>(HitResult.GetActor());
+			if (Enemy)
+			{
+				bCurrentFrameOnEnemy = true;
+			}
+		}
+
+		// 1. 마지막 프레임에서 Enemy를 겨냥하지 않았는데, 현재 프레임에서 Enemy를 겨냥한 경우 -> Color::Red
+		// 2. 마지막 프레임에서 Enemy를 겨냥했는데, 현재 프레임에서 Enemy를 겨냥하지 않은 경우 -> Color::White
+		if (bCurrentFrameOnEnemy != bLastFrameOnEnemy)
+		{
+			if (bCurrentFrameOnEnemy)
+			{
+				OnChangeCrosshairColor.ExecuteIfBound(FColor::Red);
+			}
+			else
+			{
+				OnChangeCrosshairColor.ExecuteIfBound(FColor::White);
+			}
+
+			bLastFrameOnEnemy = bCurrentFrameOnEnemy;
+		}
 	}
+}
+
+float APFCharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
+	AActor* DamageCauser)
+{
+	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
+
+	HitDilation();
+
+	return Damage;
 }
 
 void APFCharacterPlayer::SetupHUDWidget(UPFHUDWidget* InHUDWidget)
@@ -275,26 +417,16 @@ void APFCharacterPlayer::SetupHUDWidget(UPFHUDWidget* InHUDWidget)
 			InHUDWidget->UpdateAmmo(Weapon->GetCurrentAmmo(), Weapon->GetMaxAmmo());
 			// HUD에 표시되는 Ammo 값을 업데이트 하기 위해 HUD의 함수와 바인딩
 			Weapon->OnAmmoChanged.BindUObject(InHUDWidget, &UPFHUDWidget::UpdateAmmo);
-
-			// 조준 시 실행되는 HUD 함수와 바인딩
-			OnAimOn.BindUObject(InHUDWidget, &UPFHUDWidget::HideCrosshair, true);
-			// 조준 해제 시 실행되는 HUD 함수와 바인딩
-			OnAimOff.BindUObject(InHUDWidget, &UPFHUDWidget::HideCrosshair, false);
 		}
-	}
-}
 
-void APFCharacterPlayer::NotifyHitmarker(bool bIsDead)
-{
-	APFPlayerController* PFPlayerController = Cast<APFPlayerController>(GetController());
-	if (PFPlayerController)
-	{
-		UPFHUDWidget* PFHUDWidget = Cast<UPFHUDWidget>(PFPlayerController->GetPFHUDWidget());
-		if (PFHUDWidget)
-		{
-			// BlueprintImplementableEvent이기 때문에 Execute_로 실행
-			IHitmarkerInterface::Execute_ShowHitmarker(PFHUDWidget, bIsDead);
-		}
+		// 조준/비조준 시 Crosshair 표시 여부 HUD 함수와 바인딩
+		OnCrosshairSetHide.BindUObject(InHUDWidget, &UPFHUDWidget::HideCrosshair);
+
+		// 적 조준/비조준 시 Crosshair 색상 설정 HUD 함수와 바인딩
+		OnChangeCrosshairColor.BindUObject(InHUDWidget, &UPFHUDWidget::ChangeCrosshairColor);
+
+		// 적 Hit 시 Hitmarker 표시 여부 HUD 함수와 바인딩
+		OnShowHitmarker.BindUObject(InHUDWidget, &UPFHUDWidget::ShowHitmarker);
 	}
 }
 
@@ -400,16 +532,16 @@ void APFCharacterPlayer::AimOn()
 		ToggleSprint();
 	}
 
-	// OnAimOn 델리게이트와 바인딩 된 함수 실행
-	OnAimOn.ExecuteIfBound();
+	// OnCrosshairSetHide 델리게이트와 바인딩 된 함수에 true를 전달하여 크로스헤어 감추도록 설정
+	OnCrosshairSetHide.ExecuteIfBound(true);
 }
 
 void APFCharacterPlayer::AimOff()
 {
 	bIsAiming = false;
 
-	// OnAimOff 델리게이트와 바인딩 된 함수 실행
-	OnAimOff.ExecuteIfBound();
+	// OnCrosshairSetHide 델리게이트와 바인딩 된 함수에 false를 전달하여 크로스헤어 보이도록 설정
+	OnCrosshairSetHide.ExecuteIfBound(false);
 }
 
 void APFCharacterPlayer::WeaponFireStart()
@@ -445,6 +577,14 @@ void APFCharacterPlayer::Reload()
 	{
 		Weapon->ReloadStart();
 	}
+}
+
+void APFCharacterPlayer::HitDilation()
+{
+	HitDilationTime = 0.2f;
+	UGameplayStatics::SetGlobalTimeDilation(GetWorld(), HitDilationTime);
+	
+	bIsInterpolatingHitTimeDilation = true;
 }
 
 void APFCharacterPlayer::SetFOV(const float InTargetFOV)
