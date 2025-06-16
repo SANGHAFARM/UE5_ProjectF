@@ -56,7 +56,7 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 	
 	if (OtherActor && GetInstigatorController())
 	{
-		UGameplayStatics::ApplyDamage(OtherActor, 20.0f, GetInstigatorController(), this, UDamageType::StaticClass());
+		UGameplayStatics::ApplyDamage(OtherActor, BaseDamage, GetInstigatorController(), this, UDamageType::StaticClass());
 
 		// WeaponBase의 BulletHitEnemy 함수가 바인딩 되어 있으면 해당 함수 실행
 		OnBulletHitEnemyDelegate.ExecuteIfBound(OtherActor);

@@ -22,8 +22,6 @@ class PROJECTF_API APFEnemy : public APFCharacterBase, public IPFEnemyAIInterfac
 
 public:
 	APFEnemy();
-
-	bool GetIsDead() const { return bIsDead; }
 	
 protected:
 	virtual void BeginPlay() override;
@@ -33,8 +31,7 @@ protected:
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 protected:
-	void CheckHP(float InDamage);
-	void Die();
+	virtual void Die() override;
 
 	// IPFEnemyAnimationInterface에서 오버라이딩한 가상 함수
 	virtual void EnableAttackCollision(FName InSectionName) override;
@@ -44,13 +41,6 @@ protected:
 	UFUNCTION()
 	void OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
-protected:
-	UPROPERTY(EditAnywhere, Category = Enemy)
-	float CurrentHP;
-	
-	UPROPERTY(EditAnywhere, Category = Enemy)
-	float MaxHP;
-
 	// 피격 경직
 protected:
 	UPROPERTY(EditAnywhere, Category = SpeedRecovery)
@@ -60,14 +50,16 @@ protected:
 	float DefaultMaxWalkSpeed;
 	uint8 bIsInterpolatingSpeedRecovery : 1 = false;
 
+	// 공격 관련
 protected:
+	UPROPERTY(EditAnywhere, Category = Attack)
+	float BaseDamage;
+	
 	UPROPERTY(EditAnywhere, Category = Attack)
 	UAnimMontage* AttackMontage;
 	
 	FTimerHandle DeathTimerHandle;
 	float DeathTime = 3.0f;
-
-	uint8 bIsDead : 1 = false;
 
 	uint8 bIsAttacking : 1 = false;
 

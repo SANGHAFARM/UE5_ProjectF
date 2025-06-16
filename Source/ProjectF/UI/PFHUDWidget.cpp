@@ -5,6 +5,8 @@
 
 #include "PFAmmoWidget.h"
 #include "PFCrosshairWidget.h"
+#include "PFDamageDirectionIndicatorWidget.h"
+#include "PFHPWidget.h"
 #include "ProjectF/Interface/PFCharacterHUDInterface.h"
 
 UPFHUDWidget::UPFHUDWidget(const FObjectInitializer& ObjectInitializer)
@@ -26,15 +28,37 @@ void UPFHUDWidget::HideCrosshair(bool bSetHide)
 
 void UPFHUDWidget::UpdateAmmo(uint32 CurrentAmmo, uint32 MaxAmmo)
 {
-	// 델리게이트로 호출된 이벤트 함수
-	// AmmoWidget의 Text를 매개 변수로 받은 값으로 설정
-	AmmoWidget->SetCurrentAmmoText(CurrentAmmo);
-	AmmoWidget->SetMaxAmmoText(MaxAmmo);
+	if (AmmoWidget)
+	{
+		// 델리게이트로 호출된 이벤트 함수
+		// AmmoWidget의 Text를 매개 변수로 받은 값으로 설정
+		AmmoWidget->SetCurrentAmmoText(CurrentAmmo);
+		AmmoWidget->SetMaxAmmoText(MaxAmmo);
+	}
 }
 
 void UPFHUDWidget::ChangeCrosshairColor(FLinearColor InColor)
 {
-	CrosshairWidget->SetColorAndOpacity(InColor); 
+	if (CrosshairWidget)
+	{
+		CrosshairWidget->SetColorAndOpacity(InColor);
+	}
+}
+
+void UPFHUDWidget::UpdateHP(float NewCurrentHP, float MaxHP)
+{
+	if (HPWidget)
+	{
+		HPWidget->UpdateHPProgressBar(NewCurrentHP, MaxHP);
+	}
+}
+
+void UPFHUDWidget::UpdateDamageDirectionIndicator(float NewAngle)
+{
+	if (DamageDirectionIndicatorWidget)
+	{
+		DamageDirectionIndicatorWidget->SetRenderTransformAngle(NewAngle);
+	}
 }
 
 void UPFHUDWidget::NativeConstruct()
@@ -42,12 +66,18 @@ void UPFHUDWidget::NativeConstruct()
 	Super::NativeConstruct();
 
 	// 이름으로 검색해 Crosshair 위젯 설정
-	CrosshairWidget = Cast<UPFCrosshairWidget>(GetWidgetFromName("WBP_Crosshair"));
+	CrosshairWidget = Cast<UPFCrosshairWidget>(GetWidgetFromName(TEXT("WBP_Crosshair")));
 	ensure(CrosshairWidget);
 
 	// 이름으로 검색해 Ammo 위젯 설정
-	AmmoWidget = Cast<UPFAmmoWidget>(GetWidgetFromName("WBP_Ammo"));
+	AmmoWidget = Cast<UPFAmmoWidget>(GetWidgetFromName(TEXT("WBP_Ammo")));
 	ensure(AmmoWidget);
+
+	HPWidget = Cast<UPFHPWidget>(GetWidgetFromName(TEXT("WBP_HPBar")));
+	ensure(HPWidget);
+
+	DamageDirectionIndicatorWidget = Cast<UPFDamageDirectionIndicatorWidget>(GetWidgetFromName(TEXT("WBP_DamageDirectionIndicator")));
+	ensure(DamageDirectionIndicatorWidget);
 	
 	IPFCharacterHUDInterface* PawnHUD = Cast<IPFCharacterHUDInterface>(GetOwningPlayerPawn());
 	if (PawnHUD)

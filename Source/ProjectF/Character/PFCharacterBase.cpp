@@ -26,6 +26,27 @@ void APFCharacterBase::BeginPlay()
 	
 }
 
+void APFCharacterBase::CheckHP(float InDamage)
+{
+	// 실제 적용된 데미지를 현재 체력에서 감소
+	CurrentHP -= InDamage;
+
+	// 체력을 0보다 작아지지 않도록 clamp
+	CurrentHP = FMath::Clamp(CurrentHP, 0.0f, MaxHP);
+
+	// 체력이 0 이하가 되면 사망 처리
+	if (CurrentHP <= 0.0f)
+	{
+		// 사망 처리 함수 호출
+		Die();
+	}
+}
+
+void APFCharacterBase::Die()
+{
+	bIsDead = true;
+}
+
 // Called every frame
 void APFCharacterBase::Tick(float DeltaTime)
 {

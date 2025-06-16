@@ -21,6 +21,8 @@ public:
 
 	// WeaponBase의 함수와 바인딩 될 Delegate
 	FOnBulletHitEnemyDelegate OnBulletHitEnemyDelegate;
+
+	FORCEINLINE void SetBulletDamage(float NewDamage) { BaseDamage = NewDamage; }
 	
 protected:
 	// Called when the game starts or when spawned
@@ -42,4 +44,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Bullet)
 	TObjectPtr<UParticleSystem> HitEffect;
+
+	float BaseDamage;
 };

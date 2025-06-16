@@ -9,9 +9,13 @@
 #include "Interface/PFCharacterHUDInterface.h"
 #include "PFCharacterPlayer.generated.h"
 
-DECLARE_DELEGATE_OneParam(FCrosshairSetHideDelegate, bool);
-DECLARE_DELEGATE_OneParam(FCrosshairColorDelegate, FLinearColor);
-DECLARE_DELEGATE_OneParam(FShowHitmarkerDelegate, bool);
+DECLARE_DELEGATE_OneParam(FOnSetHideCrosshairDelegate, bool /* bSetHide */);
+DECLARE_DELEGATE_OneParam(FOnChangeCrosshairColorDelegate, FLinearColor /* InColor */);
+DECLARE_DELEGATE_OneParam(FOnShowHitmarkerDelegate, bool /* bTargetIsDead */);
+DECLARE_DELEGATE_TwoParams(FOnUpdateHPDelegate, float /* NewCurrentHP */, float /* MaxHP */);
+DECLARE_DELEGATE_OneParam(FOnUpdateIndicatorAngleDelegate, float /* NewAngle */);
+DECLARE_DELEGATE(FOnPlayIndicatorAnimationDelegate);
+
 
 
 class USpringArmComponent;
@@ -35,7 +39,7 @@ public:
 	APFCharacterPlayer();
 
 	// ICrosshairInterface를 통해 HUDWidget에 Hitmarker 정보를 알릴 함수
-	void NotifyHitmarker(bool bIsDead);
+	void NotifyHitmarker(bool bTargetIsDead);
 
 	// Getter
 public:
@@ -50,24 +54,36 @@ protected:
 	virtual void PostInitializeComponents() override;
 	
 	virtual void BeginPlay() override;
-	
-	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
-
-	virtual void Tick(float DeltaSeconds) override;
 
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
 
 	// IPFCharacterHUDInterface 함수 구현
 	virtual void SetupHUDWidget(UPFHUDWidget* InHUDWidget) override;
 
-	// Crosshair HUD 관련
-	FCrosshairSetHideDelegate OnCrosshairSetHide;
+	virtual void Die() override;
 	
-	FCrosshairColorDelegate OnChangeCrosshairColor;
+public:
+	virtual void SetupPlayerInputComponent(UInputComponent* PlayerInputComponent) override;
+
+	virtual void Tick(float DeltaSeconds) override;
+
+	// Delegate
+protected:
+	// Crosshair 관련
+	FOnSetHideCrosshairDelegate CrosshairSetHide;
+	
+	FOnChangeCrosshairColorDelegate ChangeCrosshairColor;
 	uint8 bCurrentFrameOnEnemy : 1 = false;
 	uint8 bLastFrameOnEnemy : 1 = false;
 
-	FShowHitmarkerDelegate OnShowHitmarker;
+	FOnShowHitmarkerDelegate ShowHitmarker;
+
+	// Damage Direction Indicator 관련
+	FOnUpdateIndicatorAngleDelegate UpdateIndicator;
+	FOnPlayIndicatorAnimationDelegate PlayIndicatorAnimation;
+
+	// HP 관련
+	FOnUpdateHPDelegate UpdateHP;
 	
 	// 조작
 protected:
@@ -94,6 +110,13 @@ protected:
 
 	void Reload();
 
+	void UpdatePlayerToCauserAngle();
+	void ResetCauser();
+
+	// HP
+	FTimerHandle HPRegenTimerHandle;
+	void HPRegen();
+
 	// 캐릭터
 protected:
 	UPROPERTY(EditAnywhere, Category = Mesh)
@@ -106,6 +129,12 @@ protected:
 	// AnimInstance를 참조하는 임시 객체
 	UPROPERTY(Transient)
 	TObjectPtr<UAnimInstance> CachedAnimInstance;
+
+	// Indicator에 나타나는 임시 공격자
+	UPROPERTY(Transient)
+	TObjectPtr<AActor> Causer = nullptr;
+
+	FTimerHandle ResetCauserTimerHandle;
 
 	// 피격 시 슬로우
 protected:

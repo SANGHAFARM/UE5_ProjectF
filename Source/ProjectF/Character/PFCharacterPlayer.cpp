@@ -17,7 +17,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
+#include "Kismet/KismetMathLibrary.h"
 #include "Player/PFPlayerController.h"
+#include "UI/PFHPWidget.h"
 #include "UI/PFHUDWidget.h"
 #include "Weapon/WeaponBase.h"
 
@@ -74,6 +76,7 @@ APFCharacterPlayer::APFCharacterPlayer()
 	SightRadius->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 	SightRadius->SetSphereRadius(1400.0f);
 	SightRadius->SetCollisionProfileName(TEXT("NoCollision"));
+	SightRadius->CanCharacterStepUpOn = ECB_No;
 
 	EnemySpawnRadius = CreateDefaultSubobject<USphereComponent>(TEXT("EnemySpawnRadius"));
 	EnemySpawnRadius->SetupAttachment(GetRootComponent());
@@ -81,6 +84,7 @@ APFCharacterPlayer::APFCharacterPlayer()
 	EnemySpawnRadius->SetRelativeLocation(FVector(0.0f, 0.0f, -90.0f));
 	EnemySpawnRadius->SetSphereRadius(2400.0f);
 	EnemySpawnRadius->SetCollisionProfileName(TEXT("NoCollision"));
+	EnemySpawnRadius->CanCharacterStepUpOn = ECB_No;
 
 	// Minimap
 	MinimapArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("MinimapArm"));
@@ -96,6 +100,7 @@ APFCharacterPlayer::APFCharacterPlayer()
 	MinimapSceneCapture->SetupAttachment(MinimapArm);
 	MinimapSceneCapture->ProjectionType = ECameraProjectionMode::Orthographic;
 	MinimapSceneCapture->OrthoWidth = 3000.0f;
+	MinimapSceneCapture->ShowFlags.SetDynamicShadows(false);
 
 	// Icon
 	PlayerIcon = CreateDefaultSubobject<UPaperSpriteComponent>(TEXT("PlayerIcon"));
@@ -196,11 +201,13 @@ APFCharacterPlayer::APFCharacterPlayer()
 	DefaultCapsuleHalfHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
 	// 캐릭터가 앉았을 때 캡슐 크기를 평상시 캡슐 크기의 반으로 설정
 	GetCharacterMovement()->SetCrouchedHalfHeight(DefaultCapsuleHalfHeight / 2);
+
+	MaxHP = 100.0f;
 }
 
-void APFCharacterPlayer::NotifyHitmarker(bool bIsDead)
+void APFCharacterPlayer::NotifyHitmarker(bool bTargetIsDead)
 {
-	OnShowHitmarker.ExecuteIfBound(bIsDead);
+	ShowHitmarker.ExecuteIfBound(bTargetIsDead);
 }
 
 void APFCharacterPlayer::PostInitializeComponents()
@@ -252,6 +259,8 @@ void APFCharacterPlayer::BeginPlay()
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
 	}
+
+	CurrentHP = MaxHP;
 }
 
 void APFCharacterPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -354,9 +363,13 @@ void APFCharacterPlayer::Tick(float DeltaSeconds)
 		bool bHitWall = GetWorld()->LineTraceSingleByChannel(HitWallResult, Start, ToWall, ECC_Visibility);
 		if (bHitWall)
 		{
-			bCloseToWall = true;
-			// bCloseToWall 상태라면 Fire 중지
-			WeaponFireEnd();
+			// CloseToWall에서 Enemy는 예외하는 로직 추가
+			if (HitWallResult.GetActor()->IsA<APFEnemy>() == false)
+			{
+				bCloseToWall = true;
+				// bCloseToWall 상태라면 Fire 중지
+				WeaponFireEnd();
+			}
 		}
 		else
 		{
@@ -372,8 +385,7 @@ void APFCharacterPlayer::Tick(float DeltaSeconds)
 		bool bHit = GetWorld()->LineTraceSingleByChannel(HitResult, Start, End, ECC_Visibility);
 		if (bHit)
 		{
-			APFEnemy* Enemy = Cast<APFEnemy>(HitResult.GetActor());
-			if (Enemy)
+			if (HitResult.GetActor()->IsA<APFEnemy>())
 			{
 				bCurrentFrameOnEnemy = true;
 			}
@@ -385,16 +397,19 @@ void APFCharacterPlayer::Tick(float DeltaSeconds)
 		{
 			if (bCurrentFrameOnEnemy)
 			{
-				OnChangeCrosshairColor.ExecuteIfBound(FColor::Red);
+				ChangeCrosshairColor.ExecuteIfBound(FColor::Red);
 			}
 			else
 			{
-				OnChangeCrosshairColor.ExecuteIfBound(FColor::White);
+				ChangeCrosshairColor.ExecuteIfBound(FColor::White);
 			}
 
 			bLastFrameOnEnemy = bCurrentFrameOnEnemy;
 		}
 	}
+
+	// 플레이어로부터 Causer 위치의 방향 업데이트 함수
+	UpdatePlayerToCauserAngle();
 }
 
 float APFCharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator,
@@ -402,7 +417,28 @@ float APFCharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+	if (GetWorld())
+	{
+		// Timer에 Causer를 nullptr로 초기화시키는 함수 연결
+		GetWorld()->GetTimerManager().SetTimer(ResetCauserTimerHandle, this, &APFCharacterPlayer::ResetCauser, 2.0f, false);
+		// Timer에 체력 재생 함수 연결
+		GetWorld()->GetTimerManager().SetTimer(HPRegenTimerHandle, this, &APFCharacterPlayer::HPRegen, 1.0f, true);
+
+		if (DamageCauser)
+		{
+			Causer = DamageCauser;
+			UpdatePlayerToCauserAngle();
+		}
+	}
+	
 	HitDilation();
+	CheckHP(Damage);
+
+	// 바인딩 했던 HUD의 HPWidget 업데이트 함수 실행
+	UpdateHP.ExecuteIfBound(CurrentHP, MaxHP);
+
+	// 바인딩 했던 HUD의 IndicatorWidget의 애니메이션을 재생하는 함수 실행
+	PlayIndicatorAnimation.ExecuteIfBound();
 
 	return Damage;
 }
@@ -420,13 +456,32 @@ void APFCharacterPlayer::SetupHUDWidget(UPFHUDWidget* InHUDWidget)
 		}
 
 		// 조준/비조준 시 Crosshair 표시 여부 HUD 함수와 바인딩
-		OnCrosshairSetHide.BindUObject(InHUDWidget, &UPFHUDWidget::HideCrosshair);
+		CrosshairSetHide.BindUObject(InHUDWidget, &UPFHUDWidget::HideCrosshair);
 
 		// 적 조준/비조준 시 Crosshair 색상 설정 HUD 함수와 바인딩
-		OnChangeCrosshairColor.BindUObject(InHUDWidget, &UPFHUDWidget::ChangeCrosshairColor);
+		ChangeCrosshairColor.BindUObject(InHUDWidget, &UPFHUDWidget::ChangeCrosshairColor);
 
 		// 적 Hit 시 Hitmarker 표시 여부 HUD 함수와 바인딩
-		OnShowHitmarker.BindUObject(InHUDWidget, &UPFHUDWidget::ShowHitmarker);
+		ShowHitmarker.BindUObject(InHUDWidget, &UPFHUDWidget::ShowHitmarker);
+
+		// HP 프로그레스바를 업데이트하는 HUD 함수와 바인딩
+		UpdateHP.BindUObject(InHUDWidget, &UPFHUDWidget::UpdateHP);
+
+		// Indicator Angle을 업데이트하는 HUD 함수와 바인딩
+		UpdateIndicator.BindUObject(InHUDWidget, &UPFHUDWidget::UpdateDamageDirectionIndicator);
+		// Indicator Animation을 실행할 HUD 함수와 바인딩
+		PlayIndicatorAnimation.BindUObject(InHUDWidget, &UPFHUDWidget::PlayDamageDirectionIndicatorAnimation);
+	}
+}
+
+void APFCharacterPlayer::Die()
+{
+	Super::Die();
+
+	// HPRegenTimerHandle Clear
+	if (GetWorld())
+	{
+		GetWorld()->GetTimerManager().ClearTimer(HPRegenTimerHandle);
 	}
 }
 
@@ -533,7 +588,7 @@ void APFCharacterPlayer::AimOn()
 	}
 
 	// OnCrosshairSetHide 델리게이트와 바인딩 된 함수에 true를 전달하여 크로스헤어 감추도록 설정
-	OnCrosshairSetHide.ExecuteIfBound(true);
+	CrosshairSetHide.ExecuteIfBound(true);
 }
 
 void APFCharacterPlayer::AimOff()
@@ -541,7 +596,7 @@ void APFCharacterPlayer::AimOff()
 	bIsAiming = false;
 
 	// OnCrosshairSetHide 델리게이트와 바인딩 된 함수에 false를 전달하여 크로스헤어 보이도록 설정
-	OnCrosshairSetHide.ExecuteIfBound(false);
+	CrosshairSetHide.ExecuteIfBound(false);
 }
 
 void APFCharacterPlayer::WeaponFireStart()
@@ -576,6 +631,46 @@ void APFCharacterPlayer::Reload()
 	if (Weapon)
 	{
 		Weapon->ReloadStart();
+	}
+}
+
+void APFCharacterPlayer::UpdatePlayerToCauserAngle()
+{
+	if (Causer)
+	{
+		FVector PlayerLocation = GetActorLocation();
+		FVector CauserLocation = Causer->GetActorLocation();
+		FRotator PlayerControlRotation = GetControlRotation();
+		float Angle = UKismetMathLibrary::FindLookAtRotation(PlayerLocation, CauserLocation).Yaw - PlayerControlRotation.Yaw;
+		
+		UpdateIndicator.ExecuteIfBound(Angle);
+	}
+}
+
+void APFCharacterPlayer::ResetCauser()
+{
+	if (GetWorld() && Causer)
+	{
+		GetWorld()->GetTimerManager().ClearTimer(ResetCauserTimerHandle);
+		Causer = nullptr;
+	}
+}
+
+void APFCharacterPlayer::HPRegen()
+{
+	if (CurrentHP < MaxHP)
+	{
+		float NewHP = CurrentHP + 2.0f;
+		CurrentHP = FMath::Clamp(NewHP, 0.0f, MaxHP);
+
+		UpdateHP.ExecuteIfBound(CurrentHP, MaxHP);
+	}
+	else
+	{
+		if (GetWorld())
+		{
+			GetWorld()->GetTimerManager().ClearTimer(HPRegenTimerHandle);
+		}
 	}
 }
 

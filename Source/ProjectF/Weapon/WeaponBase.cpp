@@ -22,7 +22,6 @@ AWeaponBase::AWeaponBase()
 
 	MagazineMesh->SetCollisionProfileName(TEXT("NoCollision"));
 	
-	MaxAmmo = 40;
 	CurrentAmmo = MaxAmmo;
 }
 
@@ -182,6 +181,7 @@ void AWeaponBase::SpawnBullet()
 			{
 				// Bullet의 델리게이트에 Enemy를 Hit 시 실행할 WeaponBase의 BulletHitEnemy 함수 바인딩
 				SpawnedBullet->OnBulletHitEnemyDelegate.BindUObject(this, &AWeaponBase::BulletHitEnemy);
+				SpawnedBullet->SetBulletDamage(WeaponDamage);
 			}
 		}
 	}

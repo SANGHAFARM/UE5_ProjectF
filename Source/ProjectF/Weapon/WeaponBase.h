@@ -63,7 +63,7 @@ protected:
 	uint32 CurrentAmmo;
 
 	UPROPERTY(EditAnywhere, Category = Weapon)
-	uint32 MaxAmmo;
+	uint32 MaxAmmo = 40;
 
 	// AnimMontage
 protected:
@@ -84,12 +84,15 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Weapon)
 	TSubclassOf<ABullet> BulletClass;
 
-	// 연사 속도 관리
-	FTimerHandle FireTimerHandle;
-	float FireRate = 0.2f;
+	UPROPERTY(EditAnywhere, Category = Weapon)
+	float WeaponDamage = 20.0f;
 
 	UPROPERTY(EditAnywhere, Category = Weapon)
 	TObjectPtr<UParticleSystem> MuzzleFlash;
+	
+	// 연사 속도 관리
+	FTimerHandle FireTimerHandle;
+	float FireRate = 0.2f;
 
 protected:
 	void ConsumeAmmo();

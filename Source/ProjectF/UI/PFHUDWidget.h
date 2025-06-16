@@ -7,6 +7,8 @@
 #include "Blueprint/UserWidget.h"
 #include "PFHUDWidget.generated.h"
 
+class UPFDamageDirectionIndicatorWidget;
+class UPFHPWidget;
 class UPFCrosshairWidget;
 class UPFAmmoWidget;
 /**
@@ -30,9 +32,19 @@ public:
 	// CrosshairWidget의 색상을 설정하는 함수
 	void ChangeCrosshairColor(FLinearColor InColor);
 
+	// HPWidget의 프로그레스바를 업데이트하는 함수
+	void UpdateHP(float NewCurrentHP, float MaxHP);
+
+	// DamageDirectionIndicator의 이미지 각도를 업데이트하는 함수
+	void UpdateDamageDirectionIndicator(float NewAngle);
+
 	// 블루프린트에서 구현할 함수 선언
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowHitmarker(bool bIsDead);
+
+	// 블루프린트에서 구현할 함수 선언
+	UFUNCTION(BlueprintImplementableEvent)
+	void PlayDamageDirectionIndicatorAnimation();
 	
 protected:
 	// UMG가 초기화될 때 호출되는 함수
@@ -46,4 +58,12 @@ private:
 	// Ammo 위젯
 	UPROPERTY()
 	TObjectPtr<UPFAmmoWidget> AmmoWidget;
+
+	// HP 위젯
+	UPROPERTY()
+	TObjectPtr<UPFHPWidget> HPWidget;
+
+	// Indicator 위젯
+	UPROPERTY()
+	TObjectPtr<UPFDamageDirectionIndicatorWidget> DamageDirectionIndicatorWidget;
 };

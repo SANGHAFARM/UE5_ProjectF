@@ -58,6 +58,7 @@ APFEnemy::APFEnemy()
 	LeftHandCollision->OnComponentBeginOverlap.AddDynamic(this, &APFEnemy::OnOverlapBegin);
 	
 	MaxHP = 100.0f;
+	BaseDamage = 20.0f;
 }
 
 void APFEnemy::BeginPlay()
@@ -108,26 +109,10 @@ float APFEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 	return ActualDamage;
 }
 
-void APFEnemy::CheckHP(float InDamage)
-{
-	// 실제 적용된 데미지를 현재 체력에서 감소
-	CurrentHP -= InDamage;
-
-	// 체력을 0보다 작아지지 않도록 clamp
-	CurrentHP = FMath::Clamp(CurrentHP, 0.0f, MaxHP);
-
-	// 체력이 0 이하가 되면 사망 처리
-	if (CurrentHP <= 0.0f)
-	{
-		// Hitmarker를 위한 값 처리
-		bIsDead = true;
-		// 사망 처리 함수 호출
-		Die();
-	}
-}
-
 void APFEnemy::Die()
 {
+	Super::Die();
+	
 	if (EnemyIcon)
 	{
 		EnemyIcon->SetVisibility(false);
@@ -207,7 +192,14 @@ void APFEnemy::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* 
 	APFCharacterPlayer* CharacterPlayer = Cast<APFCharacterPlayer>(OtherActor);
 	if (CharacterPlayer)
 	{
-		UGameplayStatics::ApplyDamage(CharacterPlayer, 20.0f, GetController(), this, UDamageType::StaticClass());
+		UGameplayStatics::ApplyDamage(CharacterPlayer, BaseDamage, GetController(), this, UDamageType::StaticClass());
+
+		if (CharacterPlayer->GetIsDead())
+		{
+			// 플레이어가 사망한 경우 AIController의 기능 정지
+			APFAIController* AIController = Cast<APFAIController>(GetController());
+			AIController->StopAI();
+		}
 	}
 }
 
