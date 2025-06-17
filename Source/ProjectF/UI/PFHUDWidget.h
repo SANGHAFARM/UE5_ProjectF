@@ -7,6 +7,7 @@
 #include "Blueprint/UserWidget.h"
 #include "PFHUDWidget.generated.h"
 
+class UPFSurvivalTimerWidget;
 class UPFDamageDirectionIndicatorWidget;
 class UPFHPWidget;
 class UPFCrosshairWidget;
@@ -39,12 +40,15 @@ public:
 	void UpdateDamageDirectionIndicator(float NewAngle);
 
 	// 블루프린트에서 구현할 함수 선언
+	// Hitmarker 애니메이션을 재생하는 함수
 	UFUNCTION(BlueprintImplementableEvent)
 	void ShowHitmarker(bool bIsDead);
 
-	// 블루프린트에서 구현할 함수 선언
+	// Indicator 애니메이션을 재생하는 함수
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayDamageDirectionIndicatorAnimation();
+
+	void UpdateSurvivalTimer(int32 NewTime);
 	
 protected:
 	// UMG가 초기화될 때 호출되는 함수
@@ -66,4 +70,8 @@ private:
 	// Indicator 위젯
 	UPROPERTY()
 	TObjectPtr<UPFDamageDirectionIndicatorWidget> DamageDirectionIndicatorWidget;
+
+	// SurvivalTimer 위젯
+	UPROPERTY()
+	TObjectPtr<UPFSurvivalTimerWidget> SurvivalTimerWidget;
 };

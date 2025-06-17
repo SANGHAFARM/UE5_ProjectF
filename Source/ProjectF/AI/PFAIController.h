@@ -23,8 +23,6 @@ public:
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
 
-	virtual void BeginPlay() override;
-
 	// Target Key의 Value 값을 Player로 설정 
 	void SetTarget();
 

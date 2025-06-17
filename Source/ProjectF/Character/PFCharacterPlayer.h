@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "InputActionValue.h"
 #include "PFCharacterBase.h"
+#include "Components/SphereComponent.h"
 #include "Components/TimelineComponent.h"
 #include "Interface/PFCharacterHUDInterface.h"
 #include "PFCharacterPlayer.generated.h"
@@ -15,6 +16,7 @@ DECLARE_DELEGATE_OneParam(FOnShowHitmarkerDelegate, bool /* bTargetIsDead */);
 DECLARE_DELEGATE_TwoParams(FOnUpdateHPDelegate, float /* NewCurrentHP */, float /* MaxHP */);
 DECLARE_DELEGATE_OneParam(FOnUpdateIndicatorAngleDelegate, float /* NewAngle */);
 DECLARE_DELEGATE(FOnPlayIndicatorAnimationDelegate);
+DECLARE_MULTICAST_DELEGATE(FOnPlayerDead);
 
 
 
@@ -48,6 +50,8 @@ public:
 	FORCEINLINE bool GetIsSprint() const { return bIsSprint; }
 	FORCEINLINE FVector2D GetMouseInput() const { return MouseInput; }
 	FORCEINLINE USkeletalMeshComponent* GetCharacterArms() const { return CharacterArms; }
+	FORCEINLINE float GetSightRadius() const { return SightRadius->GetScaledSphereRadius(); }
+	FORCEINLINE float GetEnemySpawnRadius() const { return EnemySpawnRadius->GetScaledSphereRadius(); }
 	
 protected:
 	// BeginPlay보다 이전에 실행되는 초기화 함수
@@ -67,23 +71,25 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
+	FOnPlayerDead OnPlayerDeadStopAI;
+
 	// Delegate
 protected:
 	// Crosshair 관련
-	FOnSetHideCrosshairDelegate CrosshairSetHide;
+	FOnSetHideCrosshairDelegate OnCrosshairSetHide;
 	
-	FOnChangeCrosshairColorDelegate ChangeCrosshairColor;
+	FOnChangeCrosshairColorDelegate OnChangeCrosshairColor;
 	uint8 bCurrentFrameOnEnemy : 1 = false;
 	uint8 bLastFrameOnEnemy : 1 = false;
 
-	FOnShowHitmarkerDelegate ShowHitmarker;
+	FOnShowHitmarkerDelegate OnShowHitmarker;
 
 	// Damage Direction Indicator 관련
-	FOnUpdateIndicatorAngleDelegate UpdateIndicator;
-	FOnPlayIndicatorAnimationDelegate PlayIndicatorAnimation;
+	FOnUpdateIndicatorAngleDelegate OnUpdateIndicator;
+	FOnPlayIndicatorAnimationDelegate OnPlayIndicatorAnimation;
 
 	// HP 관련
-	FOnUpdateHPDelegate UpdateHP;
+	FOnUpdateHPDelegate OnUpdateHP;
 	
 	// 조작
 protected:

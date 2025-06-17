@@ -57,9 +57,6 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = Attack)
 	UAnimMontage* AttackMontage;
-	
-	FTimerHandle DeathTimerHandle;
-	float DeathTime = 3.0f;
 
 	uint8 bIsAttacking : 1 = false;
 

@@ -7,6 +7,9 @@
 #include "PFCrosshairWidget.h"
 #include "PFDamageDirectionIndicatorWidget.h"
 #include "PFHPWidget.h"
+#include "PFSurvivalTimerWidget.h"
+#include "Game/PFGameMode.h"
+#include "Kismet/GameplayStatics.h"
 #include "ProjectF/Interface/PFCharacterHUDInterface.h"
 
 UPFHUDWidget::UPFHUDWidget(const FObjectInitializer& ObjectInitializer)
@@ -61,6 +64,14 @@ void UPFHUDWidget::UpdateDamageDirectionIndicator(float NewAngle)
 	}
 }
 
+void UPFHUDWidget::UpdateSurvivalTimer(int32 NewTime)
+{
+	if (SurvivalTimerWidget)
+	{
+		SurvivalTimerWidget->SetRemainTimeText(NewTime);
+	}
+}
+
 void UPFHUDWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
@@ -83,5 +94,15 @@ void UPFHUDWidget::NativeConstruct()
 	if (PawnHUD)
 	{
 		PawnHUD->SetupHUDWidget(this);
+	}
+	
+	SurvivalTimerWidget = Cast<UPFSurvivalTimerWidget>(GetWidgetFromName(TEXT("WBP_SurvivalTimer")));
+	ensure(SurvivalTimerWidget);
+
+	APFGameMode* GameMode = Cast<APFGameMode>(UGameplayStatics::GetGameMode(this));
+	if (GameMode)
+	{
+		// PFGameMode의 델리게이트에 HUD의 남은 시간 텍스트를 업데이트하는 함수 바인딩
+		GameMode->OnUpdateSurvivalRemainTime.BindUObject(this, &UPFHUDWidget::UpdateSurvivalTimer);
 	}
 }
