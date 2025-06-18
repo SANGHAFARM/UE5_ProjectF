@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "WeaponBase.generated.h"
 
+class UForceFeedbackComponent;
 class APFCharacterPlayer;
 class ABullet;
 DECLARE_DELEGATE_TwoParams(FOnAmmoChanged, uint32 /* CurrentAmmo */, uint32 /* MaxAmmo */);
@@ -93,6 +94,13 @@ protected:
 	// 연사 속도 관리
 	FTimerHandle FireTimerHandle;
 	float FireRate = 0.2f;
+
+	// Force Feedback Effect
+	UPROPERTY(EditDefaultsOnly, Category = Weapon)
+	TObjectPtr<UForceFeedbackEffect> FireFeedbackEffect;
+	
+	UPROPERTY()
+	TObjectPtr<UForceFeedbackComponent> FireFeedbackComponent = nullptr; 
 
 protected:
 	void ConsumeAmmo();

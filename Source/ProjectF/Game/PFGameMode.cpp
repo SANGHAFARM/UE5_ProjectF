@@ -21,7 +21,7 @@ void APFGameMode::BeginPlay()
 		SpawnerInstance = GetWorld()->SpawnActor<APFEnemySpawner>(SpawnerClass, FVector::ZeroVector, FRotator::ZeroRotator);
 	}
 
-	SpawnEnemyRandomTime();
+	GetWorldTimerManager().SetTimer(SpawnTimerHandle, this, &APFGameMode::SpawnEnemyRandomTime, 2.0f, false);
 }
 
 void APFGameMode::SpawnEnemy()
@@ -47,7 +47,7 @@ void APFGameMode::SpawnEnemy()
 
 void APFGameMode::SpawnEnemyRandomTime()
 {
-	float RandomTime = FMath::RandRange(3.0f, 5.0f);
+	float RandomTime = FMath::RandRange(2.0f, 4.0f);
 
 	SpawnEnemy();
 	

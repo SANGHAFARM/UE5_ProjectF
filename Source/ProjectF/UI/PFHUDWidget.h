@@ -23,6 +23,8 @@ class PROJECTF_API UPFHUDWidget : public UUserWidget
 public:
 	UPFHUDWidget(const FObjectInitializer& ObjectInitializer);
 
+	void SetHideHUDWidget();
+
 public:
 	// Crosshair 표시 여부 함수
 	void HideCrosshair(bool bSetHide);
@@ -48,6 +50,7 @@ public:
 	UFUNCTION(BlueprintImplementableEvent)
 	void PlayDamageDirectionIndicatorAnimation();
 
+	// SurvivalTimer 텍스트를 업데이트하는 함수
 	void UpdateSurvivalTimer(int32 NewTime);
 	
 protected:

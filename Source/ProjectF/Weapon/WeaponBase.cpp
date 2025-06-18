@@ -6,7 +6,7 @@
 #include "Kismet/GameplayStatics.h"
 #include "Weapon/Bullet.h"
 #include "Character/PFCharacterPlayer.h"
-#include "Enemy/PFEnemy.h"
+#include "Components/ForceFeedbackComponent.h"
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -58,15 +58,30 @@ void AWeaponBase::Fire()
 
 	if (GetWorld())
 	{
-		// Timer를 통해서 FireRate 시간마마다 총을 발사
+		// Timer를 통해서 FireRate 시간마마다 총알을 발사
 		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &AWeaponBase::Fire, FireRate, true);
+	}
+
+	// 현재 입력 디바이스가 게임패드일 때만 진동 설정
+	if (CachedPFCharacter->CheckCurrentInputDeviceIsGamepad())
+	{
+		if (FireFeedbackComponent)
+		{
+			FireFeedbackComponent->Play();
+		}
 	}
 }
 
 void AWeaponBase::FireEnd()
 {
 	bIsFiring = false;
+
 	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
+	
+	if (FireFeedbackComponent->IsActive())
+	{
+		FireFeedbackComponent->Stop();
+	}
 }
 
 void AWeaponBase::ReloadStart()
@@ -99,6 +114,11 @@ void AWeaponBase::ReloadEnd()
 	
 	CurrentAmmo = MaxAmmo;
 
+	if (FireFeedbackComponent->IsActive() == false)
+	{
+		FireFeedbackComponent->Play();
+	}
+	
 	UpdateAmmoHUD();
 }
 
@@ -107,12 +127,12 @@ void AWeaponBase::BulletHitEnemy(AActor* HitActor)
 	// HitActor가 유효한지 체크
 	if (HitActor)
 	{
-		// HitActor가 유효하면 PFEnemy로 캐스팅이 되는지 확인
-		APFEnemy* PFEnemy = Cast<APFEnemy>(HitActor);
-		if (PFEnemy)
+		// HitActor가 유효하면 APFCharacterBase로 캐스팅이 되는지 확인
+		APFCharacterBase* PFCharacter = Cast<APFCharacterBase>(HitActor);
+		if (PFCharacter)
 		{
-			// PFEnemy로 캐스팅에 성공하면 PFEnemy의 bIsDead 상태를 PFCharacter의 함수로 넘김
-			if (PFEnemy->GetIsDead())
+			// APFCharacterBase로 캐스팅에 성공하면 APFCharacterBase의 bIsDead 상태를 PFCharacter의 NotifyHitmarker 함수로 넘김
+			if (PFCharacter->GetIsDead())
 			{
 				CachedPFCharacter->NotifyHitmarker(true);
 			}
@@ -129,10 +149,26 @@ void AWeaponBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CachedPFCharacter = Cast<APFCharacterPlayer>(GetOwner());
-	if (CachedPFCharacter)
+	if (GetOwner())
 	{
-		CachedCharacterArmsAnimInstance = CachedPFCharacter->GetCharacterArms()->GetAnimInstance();
+		CachedPFCharacter = Cast<APFCharacterPlayer>(GetOwner());
+		if (CachedPFCharacter)
+		{
+			CachedCharacterArmsAnimInstance = CachedPFCharacter->GetCharacterArms()->GetAnimInstance();
+		}
+	}
+
+	// UForceFeedbackComponent 생성 후 저장
+	FireFeedbackComponent = NewObject<UForceFeedbackComponent>(this);
+	FireFeedbackComponent->bAutoActivate = false;
+	FireFeedbackComponent->bAutoDestroy = false;
+	// 컴포넌트를 월드에 등록
+	FireFeedbackComponent->RegisterComponentWithWorld(GetWorld());
+	FireFeedbackComponent->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+	FireFeedbackComponent->bLooping = false;
+	if (FireFeedbackEffect)
+	{
+		FireFeedbackComponent->SetForceFeedbackEffect(FireFeedbackEffect);
 	}
 
 	MaxAmmo = 40;

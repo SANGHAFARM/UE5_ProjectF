@@ -59,6 +59,11 @@ void APFAIController::OnPossess(APawn* InPawn)
 
 void APFAIController::SetTarget()
 {
+	if (GetPawn() == nullptr)
+	{
+		return;
+	}
+	
 	UBlackboardComponent* BlackboardPtr = Blackboard.Get();
 	UWorld* World = GetPawn()->GetWorld();
 	if (BlackboardPtr && World)

@@ -6,7 +6,7 @@
 #include "InputActionValue.h"
 #include "PFCharacterBase.h"
 #include "Components/SphereComponent.h"
-#include "Components/TimelineComponent.h"
+#include "GameFramework/InputDeviceSubsystem.h"
 #include "Interface/PFCharacterHUDInterface.h"
 #include "PFCharacterPlayer.generated.h"
 
@@ -17,7 +17,6 @@ DECLARE_DELEGATE_TwoParams(FOnUpdateHPDelegate, float /* NewCurrentHP */, float 
 DECLARE_DELEGATE_OneParam(FOnUpdateIndicatorAngleDelegate, float /* NewAngle */);
 DECLARE_DELEGATE(FOnPlayIndicatorAnimationDelegate);
 DECLARE_MULTICAST_DELEGATE(FOnPlayerDead);
-
 
 
 class USpringArmComponent;
@@ -42,6 +41,9 @@ public:
 
 	// ICrosshairInterface를 통해 HUDWidget에 Hitmarker 정보를 알릴 함수
 	void NotifyHitmarker(bool bTargetIsDead);
+
+	// 현재 입력 디바이스가 게임패드인지 확인
+	bool CheckCurrentInputDeviceIsGamepad();
 
 	// Getter
 public:
@@ -90,9 +92,36 @@ protected:
 
 	// HP 관련
 	FOnUpdateHPDelegate OnUpdateHP;
+
+	// 플레이어 사망 시 HUD 숨김 처리 함수와 바인딩 할 델리게이트
+	FOnPlayerDead OnPlayerDeadSetHideHUD;
 	
 	// 조작
 protected:
+	// Look 함수에서 Cast 부하를 줄이기 위해 InputDeviceSubsystem 캐싱
+	UPROPERTY(Transient)
+	TObjectPtr<UInputDeviceSubsystem> CachedInputSubsystem;
+
+	// Look 함수에서 Cast 부하를 줄이기 위해 GetMostRecentlyUsedHardwareDevice 함수에 사용할 PlatformUserId 캐싱
+	UPROPERTY(Transient)
+	FPlatformUserId CachedUserId;
+
+	// 비조준 시 마우스 민감도
+	UPROPERTY(EditAnywhere, Category = Input)
+	float MouseSensitivity = 0.8f;
+
+	// 조준 시 마우스 민감도
+	UPROPERTY(EditAnywhere, Category = Input)
+	float MouseSensitivityOnAim = 0.4f;
+
+	// 비조준 시 게임패드 민감도
+	UPROPERTY(EditAnywhere, Category = Input)
+	float GamepadSensitivity = 0.8f;
+
+	// 조준 시 게임패드 민감도
+	UPROPERTY(EditAnywhere, Category = Input)
+	float GamepadSensitivityOnAim = 0.3f;
+	
 	// 애니메이션에 쓰기 위해 마우스 입력 값 저장
 	FVector2D MouseInput;
 	
@@ -142,7 +171,7 @@ protected:
 
 	FTimerHandle ResetCauserTimerHandle;
 
-	// 피격 시 슬로우
+	// 피격
 protected:
 	UPROPERTY(EditAnywhere, Category = HitDilation)
 	float HitDilationInterpSpeed = 1.0f;
@@ -151,6 +180,9 @@ protected:
 	bool bIsInterpolatingHitTimeDilation : 1 = false;
 	
 	void HitDilation();
+
+	UPROPERTY(EditDefaultsOnly, Category = ForceFeedback)
+	TObjectPtr<UForceFeedbackEffect> GetHitFeedback;
 	
 	// 카메라
 protected:

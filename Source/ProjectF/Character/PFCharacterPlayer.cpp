@@ -2,7 +2,6 @@
 
 
 #include "PFCharacterPlayer.h"
-#include "PFCharacterPlayer.h"
 
 #include "Camera/CameraComponent.h"
 #include "EnhancedInputComponent.h"
@@ -15,11 +14,10 @@
 #include "Components/SpotLightComponent.h"
 #include "Enemy/PFEnemy.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "GameFramework/InputSettings.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
-#include "Player/PFPlayerController.h"
-#include "UI/PFHPWidget.h"
 #include "UI/PFHUDWidget.h"
 #include "Weapon/WeaponBase.h"
 
@@ -201,13 +199,30 @@ APFCharacterPlayer::APFCharacterPlayer()
 	DefaultCapsuleHalfHeight = GetCapsuleComponent()->GetUnscaledCapsuleHalfHeight();
 	// 캐릭터가 앉았을 때 캡슐 크기를 평상시 캡슐 크기의 반으로 설정
 	GetCharacterMovement()->SetCrouchedHalfHeight(DefaultCapsuleHalfHeight / 2);
-
+	
 	MaxHP = 100.0f;
 }
 
 void APFCharacterPlayer::NotifyHitmarker(bool bTargetIsDead)
 {
 	OnShowHitmarker.ExecuteIfBound(bTargetIsDead);
+}
+
+bool APFCharacterPlayer::CheckCurrentInputDeviceIsGamepad()
+{
+	if (CachedInputSubsystem)
+	{
+		FHardwareDeviceIdentifier CurrentDevice = CachedInputSubsystem->GetMostRecentlyUsedHardwareDevice(CachedUserId);
+
+		if (CurrentDevice.PrimaryDeviceType == EHardwareDevicePrimaryType::Gamepad)
+		{
+			return true;
+		}
+
+		return false;
+	}
+
+	return false;
 }
 
 void APFCharacterPlayer::PostInitializeComponents()
@@ -258,8 +273,19 @@ void APFCharacterPlayer::BeginPlay()
 			Subsystem->ClearAllMappings();
 			Subsystem->AddMappingContext(DefaultMappingContext, 0);
 		}
+
+		ULocalPlayer* LocalPlayer = PlayerController->GetLocalPlayer();
+		if (LocalPlayer)
+		{
+			// 현재 Local 플레이어에게 할당된 플랫폼의 Id 캐싱
+			CachedUserId = LocalPlayer->GetPlatformUserId();
+		}
 	}
 
+	// InputDeviceSubsystem 캐싱
+	CachedInputSubsystem = Cast<UInputDeviceSubsystem>(GEngine->GetEngineSubsystem<UInputDeviceSubsystem>());
+	ensure(CachedInputSubsystem);
+	
 	CurrentHP = MaxHP;
 }
 
@@ -430,6 +456,20 @@ float APFCharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 			UpdatePlayerToCauserAngle();
 		}
 	}
+
+	if (CheckCurrentInputDeviceIsGamepad())
+	{
+		APlayerController* PlayerController = Cast<APlayerController>(GetController());
+		if (PlayerController)
+		{
+			FForceFeedbackParameters ForceFeedbackParams;
+			ForceFeedbackParams.bLooping = false;
+			ForceFeedbackParams.bIgnoreTimeDilation = true;
+			ForceFeedbackParams.bPlayWhilePaused = false;
+		
+			PlayerController->ClientPlayForceFeedback(GetHitFeedback, ForceFeedbackParams);
+		}
+	}
 	
 	HitDilation();
 	CheckHP(Damage);
@@ -471,6 +511,9 @@ void APFCharacterPlayer::SetupHUDWidget(UPFHUDWidget* InHUDWidget)
 		OnUpdateIndicator.BindUObject(InHUDWidget, &UPFHUDWidget::UpdateDamageDirectionIndicator);
 		// Indicator Animation을 실행할 HUD 함수와 바인딩
 		OnPlayIndicatorAnimation.BindUObject(InHUDWidget, &UPFHUDWidget::PlayDamageDirectionIndicatorAnimation);
+
+		// 플레이어 사망 시 HUD 위젯을 숨기는 HUD 함수와 바인딩
+		OnPlayerDeadSetHideHUD.AddUObject(InHUDWidget, &UPFHUDWidget::SetHideHUDWidget);
 	}
 }
 
@@ -483,12 +526,30 @@ void APFCharacterPlayer::Die()
 		OnPlayerDeadStopAI.Broadcast();
 	}
 
+	WeaponFireEnd();
+
+	// 캡슐 컴포넌트를 NoCollision으로 설정하여 Collision 비활성화
 	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// CharacterArms 숨김 처리
+	CharacterArms->SetVisibility(false);
+	// Weapon 숨김 처리
+	Weapon->SetHidden(true);
+
+	// HUD를 숨김 처리하는 함수와 바인딩된 델리게이트 실행
+	OnPlayerDeadSetHideHUD.Broadcast();
 	
 	// HPRegenTimerHandle Clear
 	if (GetWorld())
 	{
 		GetWorld()->GetTimerManager().ClearTimer(HPRegenTimerHandle);
+	}
+
+	// 컨트롤러 가져오기
+	APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	if (PlayerController)
+	{
+		// 입력 비활성화
+		DisableInput(PlayerController);
 	}
 }
 
@@ -524,9 +585,38 @@ void APFCharacterPlayer::Look(const FInputActionValue& Value)
 	// 입력 값 읽기
 	MouseInput = Value.Get<FVector2D>();
 	
-	// 컨트롤러에 회전 추가
-	AddControllerYawInput(MouseInput.X);
-	AddControllerPitchInput(MouseInput.Y);
+	if (CheckCurrentInputDeviceIsGamepad())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Device : Gamepad"))
+		// 현재 입력 디바이스가 Gamepad
+		if (bIsAiming)
+		{
+			// Aim 중일 때 민감도를 낮게 조절
+			AddControllerYawInput(MouseInput.X * GamepadSensitivityOnAim);
+			AddControllerPitchInput(MouseInput.Y * GamepadSensitivityOnAim);
+		}
+		else
+		{
+			AddControllerYawInput(MouseInput.X * GamepadSensitivity);
+			AddControllerPitchInput(MouseInput.Y * GamepadSensitivity);
+		}
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Device : KeyboardAndMouse"));
+		// 현재 입력 디바이스가 KeyboardAndMouse
+		if (bIsAiming)
+		{
+			// Aim 중일 때 민감도를 낮게 조절
+			AddControllerYawInput(MouseInput.X * MouseSensitivityOnAim);
+			AddControllerPitchInput(MouseInput.Y * MouseSensitivityOnAim);
+		}
+		else
+		{
+			AddControllerYawInput(MouseInput.X * MouseSensitivity);
+			AddControllerPitchInput(MouseInput.Y * MouseSensitivity);
+		}
+	}
 }
 
 void APFCharacterPlayer::LookEnd(const FInputActionValue& Value)

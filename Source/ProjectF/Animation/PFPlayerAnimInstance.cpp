@@ -33,7 +33,17 @@ void UPFPlayerAnimInstance::NativeUpdateAnimation(float DeltaSeconds)
 		// MouseSwayLocation의 X 값을 캐릭터 MouseInput의 X 값으로 보간
 		// MouseSwayLocation의 Y 값을 캐릭터 MouseInput의 Z 값으로 보간
 		float AimAlpha = bIsAiming ? 0.15f : 1.0f;
-		FVector TargetVec = FVector(PFCharacter->GetMouseInput().X, 0.0f, PFCharacter->GetMouseInput().Y) * AimAlpha;
+		
+		FVector TargetVec;
+		if (bIsAiming)
+		{
+			TargetVec = FVector(PFCharacter->GetMouseInput().X * 0.2f, 0.0f, PFCharacter->GetMouseInput().Y * 0.2f) * AimAlpha;
+		}
+		else
+		{
+			TargetVec = FVector(PFCharacter->GetMouseInput().X, 0.0f, PFCharacter->GetMouseInput().Y) * AimAlpha;
+		}
+		
 		MouseSwayLocation = FMath::VInterpTo(MouseSwayLocation, TargetVec, DeltaSeconds, 8.0f);
 	}
 

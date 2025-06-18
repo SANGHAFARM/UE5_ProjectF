@@ -17,6 +17,11 @@ UPFHUDWidget::UPFHUDWidget(const FObjectInitializer& ObjectInitializer)
 {
 }
 
+void UPFHUDWidget::SetHideHUDWidget()
+{
+	this->SetVisibility(ESlateVisibility::Hidden);
+}
+
 void UPFHUDWidget::HideCrosshair(bool bSetHide)
 {
 	if (bSetHide)
@@ -104,5 +109,6 @@ void UPFHUDWidget::NativeConstruct()
 	{
 		// PFGameMode의 델리게이트에 HUD의 남은 시간 텍스트를 업데이트하는 함수 바인딩
 		GameMode->OnUpdateSurvivalRemainTime.BindUObject(this, &UPFHUDWidget::UpdateSurvivalTimer);
+		SurvivalTimerWidget->SetRemainTimeText(GameMode->GetRemainTime());
 	}
 }

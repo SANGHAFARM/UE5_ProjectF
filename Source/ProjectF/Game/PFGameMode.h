@@ -23,6 +23,8 @@ public:
 	// HUD의 남은 시간을 업데이트하는 함수와 바인딩 할 델리게이트
 	FOnUpdateSurvivalRemainTimeDelegate OnUpdateSurvivalRemainTime;
 
+	FORCEINLINE uint32 GetRemainTime() const { return RemainTime; }
+
 protected:
 	UPROPERTY(EditAnywhere, Category = Spawner)
 	TSubclassOf<APFEnemySpawner> SpawnerClass;
@@ -45,7 +47,7 @@ protected:
 
 private:
 	UPROPERTY(EditAnywhere, Category = Time)
-	uint32 DefaultTime = 30;
+	uint32 DefaultTime = 60;
 	
 	UPROPERTY(EditAnywhere, Category = Time)
 	uint32 RemainTime;
