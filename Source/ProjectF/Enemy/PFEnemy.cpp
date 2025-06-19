@@ -8,7 +8,9 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "AI/PFAIController.h"
 #include "Character/PFCharacterPlayer.h"
+#include "Components/AudioComponent.h"
 #include "Components/SphereComponent.h"
+#include "Sound/SoundCue.h"
 #include "Kismet/GameplayStatics.h"
 
 APFEnemy::APFEnemy()
@@ -45,6 +47,11 @@ APFEnemy::APFEnemy()
 	EnemyIcon->bVisibleInRealTimeSkyCaptures = false;
 	EnemyIcon->bVisibleInRayTracing = false;
 	EnemyIcon->SetVisibleInSceneCaptureOnly(true);
+
+	// Audio
+	LocomotionSound = CreateDefaultSubobject<UAudioComponent>(TEXT("LocomotionSound"));
+	LocomotionSound->SetupAttachment(GetRootComponent());
+	LocomotionSound->bAutoActivate = false;
 	
 	// Enemy의 회전을 컨트롤러의 회전에 따르지 않도록 설정
 	bUseControllerRotationYaw = false;
@@ -69,6 +76,11 @@ void APFEnemy::BeginPlay()
 	CurrentHP = MaxHP;
 
 	DefaultMaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
+
+	if (LocomotionSound)
+	{
+		LocomotionSound->Activate(true);
+	}
 }
 
 void APFEnemy::Tick(float DeltaSeconds)
@@ -116,6 +128,11 @@ void APFEnemy::Die()
 	if (EnemyIcon)
 	{
 		EnemyIcon->SetVisibility(false);
+	}
+
+	if (DeathSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, DeathSound, GetActorLocation());
 	}
 	
 	// 이동 컴포넌트 비활성화하여 움직이지 않도록 설정
@@ -194,6 +211,11 @@ void APFEnemy::OnOverlapBegin(UPrimitiveComponent* OverlappedComponent, AActor* 
 	{
 		UGameplayStatics::ApplyDamage(CharacterPlayer, BaseDamage, GetController(), this, UDamageType::StaticClass());
 
+		if (AttackHitSound)
+		{
+			UGameplayStatics::PlaySoundAtLocation(this, AttackHitSound, SweepResult.ImpactPoint);
+		}
+		
 		if (CharacterPlayer->GetIsDead())
 		{
 			// 플레이어가 사망한 경우 AIController의 기능 정지

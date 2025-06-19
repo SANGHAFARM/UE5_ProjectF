@@ -208,31 +208,31 @@ protected:
 	
 	// 입력
 protected:
-	UPROPERTY(EditAnywhere, Category = Input)
+	UPROPERTY(EditDefaultsOnly, Category = Input)
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
 	
-	UPROPERTY(EditAnywhere, Category = Input)
+	UPROPERTY(EditDefaultsOnly, Category = Input)
 	TObjectPtr<UInputAction> MoveAction;
 	
-	UPROPERTY(EditAnywhere, Category = Input)
+	UPROPERTY(EditDefaultsOnly, Category = Input)
 	TObjectPtr<UInputAction> LookAction;
 	
-	UPROPERTY(EditAnywhere, Category = Input)
+	UPROPERTY(EditDefaultsOnly, Category = Input)
 	TObjectPtr<UInputAction> JumpAction;
 
-	UPROPERTY(EditAnywhere, Category = Input)
+	UPROPERTY(EditDefaultsOnly, Category = Input)
 	TObjectPtr<UInputAction> SprintAction;
 
-	UPROPERTY(EditAnywhere, Category = Input)
+	UPROPERTY(EditDefaultsOnly, Category = Input)
 	TObjectPtr<UInputAction> CrouchAction;
 
-	UPROPERTY(EditAnywhere, Category = Input)
+	UPROPERTY(EditDefaultsOnly, Category = Input)
 	TObjectPtr<UInputAction> AimAction;
 
-	UPROPERTY(EditAnywhere, Category = Input)
+	UPROPERTY(EditDefaultsOnly, Category = Input)
 	TObjectPtr<UInputAction> FireAction;
 
-	UPROPERTY(EditAnywhere, Category = Input)
+	UPROPERTY(EditDefaultsOnly, Category = Input)
 	TObjectPtr<UInputAction> ReloadAction;
 	
 	// 달리기
@@ -240,7 +240,7 @@ protected:
 	UPROPERTY(BlueprintReadOnly, Category = Sprint)
 	uint8 bIsSprint : 1 = false;
 
-	UPROPERTY(EditAnywhere, Category = Sprint)
+	UPROPERTY(EditDefaultsOnly, Category = Sprint)
 	TObjectPtr<UCurveFloat> SprintFOVCurve;
 
 	float DefaultMaxWalkSpeed;
@@ -249,7 +249,7 @@ protected:
 	void SprintOff();
 
 	// 앉기
-	UPROPERTY(EditAnywhere, Category = Crouch)
+	UPROPERTY(EditDefaultsOnly, Category = Crouch)
 	TObjectPtr<UCurveFloat> CrouchCurve;
 
 	UPROPERTY(EditAnywhere, Category = Crouch)
@@ -269,13 +269,13 @@ protected:
 
 	// 무기
 protected:
-	UPROPERTY(EditAnywhere, Category = Weapon)
+	UPROPERTY(EditDefaultsOnly, Category = Weapon)
 	TObjectPtr<UAnimMontage> EquipMontage;
 	
-	UPROPERTY(EditAnywhere, Category = Weapon)
+	UPROPERTY(EditDefaultsOnly, Category = Weapon)
 	TSubclassOf<AWeaponBase> WeaponClass = nullptr;
 	
-	UPROPERTY(EditAnywhere, Category = Weapon)
+	UPROPERTY(EditDefaultsOnly, Category = Weapon)
 	TObjectPtr<AWeaponBase> Weapon = nullptr;
 
 	uint8 bIsAiming : 1 = false;
@@ -306,4 +306,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Icon)
 	TObjectPtr<UPaperSpriteComponent> PlayerSight;
+
+	// 사운드
+	UPROPERTY(EditDefaultsOnly, Category = Sound)
+	TObjectPtr<USoundCue> HitReactionSound;
 };

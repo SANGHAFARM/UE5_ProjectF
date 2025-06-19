@@ -28,6 +28,7 @@ public:
 	FORCEINLINE bool GetIsFiring() const { return bIsFiring; }
 	FORCEINLINE bool GetIsReloading() const { return bIsFiring; }
 
+	void FireStart();
 	void Fire();
 	void FireEnd();
 
@@ -93,7 +94,10 @@ protected:
 	
 	// 연사 속도 관리
 	FTimerHandle FireTimerHandle;
+	UPROPERTY(EditAnywhere, Category = Weapon)
 	float FireRate = 0.2f;
+
+	uint8 bOnCoolDown : 1 = false;
 
 	// Force Feedback Effect
 	UPROPERTY(EditDefaultsOnly, Category = Weapon)
@@ -105,6 +109,8 @@ protected:
 protected:
 	void ConsumeAmmo();
 	void SpawnBullet();
+
+	void FireCooldownEnd();
 	
 	// 델리게이트로 AmmoWidget의 Ammo 텍스트를 업데이트하는 함수
 	void UpdateAmmoHUD();

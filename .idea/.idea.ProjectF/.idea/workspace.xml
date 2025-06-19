@@ -15,20 +15,29 @@
   <component name="ChangeListManager">
     <list default="true" id="6c30e7ba-4ed6-4f4b-9c36-e3aa6bceab0b" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProjectF/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProjectF/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonCharacter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonPlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonPlayerController.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_Weapon_Component.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_Weapon_Component.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/InfimaGames/FreeFPSTemplate/Art/AssaultRifle/Animations/A_FP_AssaultRifle_Run_Loop.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/InfimaGames/FreeFPSTemplate/Art/AssaultRifle/Animations/A_FP_AssaultRifle_Run_Loop.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/InfimaGames/FreeFPSTemplate/Art/AssaultRifle/Animations/A_FP_AssaultRifle_Walk_F_Loop.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/InfimaGames/FreeFPSTemplate/Art/AssaultRifle/Animations/A_FP_AssaultRifle_Walk_F_Loop.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/InfimaGames/FreeFPSTemplate/Art/AssaultRifle/Animations/A_FP_AssaultRifle_Walk_F_Loop_Aimed.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/InfimaGames/FreeFPSTemplate/Art/AssaultRifle/Animations/A_FP_AssaultRifle_Walk_F_Loop_Aimed.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/ABP_PFCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/ABP_PFCharacter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/AM_Fire.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/AM_Fire.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/AM_Reload.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/AM_Reload.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Character/BP_PFCharacterPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Character/BP_PFCharacterPlayer.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Enemy/AM_PFEnemyAttack.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Enemy/AM_PFEnemyAttack.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Enemy/BP_PFEnemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Enemy/BP_PFEnemy.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Player/BP_PFPlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Player/BP_PFPlayerController.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/UI/WBP_HUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/UI/WBP_HUD.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Weapon/BP_WeaponBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Weapon/BP_WeaponBase.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/ProjectF/Input/IMC_Default.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Input/IMC_Default.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/ProjectF/Maps/Demo.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Maps/Demo.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/PFAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/PFAIController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/PFPlayerAnimInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/PFPlayerAnimInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UndeadPack/Zombie/Animations/Anim_Walk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UndeadPack/Zombie/Animations/Anim_Walk.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectF.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectF.sln.DotSettings.user" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Game/PFGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Game/PFGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Game/PFGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Game/PFGameMode.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.h" afterDir="false" />
     </list>
@@ -44,25 +53,8 @@
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://16" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://1" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../Program Files/Microsoft Visual Studio/2022/Community/VC/Tools/MSVC/14.38.33130/include/atomic" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/ProjectF/UI/PFDamageDirectionIndicatorWidget.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -73,6 +65,15 @@
     <setting file="file://$PROJECT_DIR$/Source/ProjectF/UI/PFSurvivalTimerWidget.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Intermediate/Build/Win64/UnrealEditor/Inc/Engine/UHT/InputSettings.generated.h" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Plugins/Media/WmfMedia/Source/WmfMedia/Private/Wmf/WmfMediaByteStream.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Editor/CurveEditor/Private/SCurveEditorView.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Editor/GraphEditor/Private/SGraphPin.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Editor/MovieSceneTools/Public/MovieSceneToolsModule.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Editor/UnrealEd/Classes/Editor/TransBuffer.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Editor/UnrealEd/Private/LevelEditorViewport.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Core/Public/Delegates/DelegateInstancesImpl.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/CoreUObject/Public/UObject/ObjectHandle.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/CoreUObject/Public/UObject/ObjectHandleTracking.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/CoreUObject/Public/UObject/ObjectPtr.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Classes/Engine/LocalPlayer.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Classes/Engine/Player.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Classes/GameFramework/ForceFeedbackParameters.h" root0="FORCE_HIGHLIGHTING" />
@@ -82,6 +83,8 @@
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Public/Subsystems/EngineSubsystem.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Public/Subsystems/Subsystem.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Public/Subsystems/SubsystemCollection.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Slate/Private/Framework/Application/SlateApplication.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/UMG/Public/Components/Button.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
@@ -93,22 +96,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "C/C++ Project.ProjectF.executor": "Debug",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "main",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.sourceCode.C#",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;C/C++ Project.ProjectF.executor&quot;: &quot;Debug&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.sourceCode.C#&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="C/C++ Project.ProjectF">
     <configuration name="ProjectF" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">
@@ -252,7 +255,10 @@
       <workItem from="1750119071253" duration="9208000" />
       <workItem from="1750132298460" duration="14245000" />
       <workItem from="1750206609803" duration="10922000" />
-      <workItem from="1750218894379" duration="16173000" />
+      <workItem from="1750218894379" duration="17040000" />
+      <workItem from="1750247020205" duration="2261000" />
+      <workItem from="1750291736248" duration="22229000" />
+      <workItem from="1750328518791" duration="3057000" />
     </task>
     <servers />
   </component>

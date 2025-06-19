@@ -18,6 +18,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "Sound/SoundCue.h"
 #include "UI/PFHUDWidget.h"
 #include "Weapon/WeaponBase.h"
 
@@ -443,6 +444,11 @@ float APFCharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 {
 	float Damage = Super::TakeDamage(DamageAmount, DamageEvent, EventInstigator, DamageCauser);
 
+	if (HitReactionSound)
+	{
+		UGameplayStatics::PlaySoundAtLocation(this, HitReactionSound, GetActorLocation());
+	}
+	
 	if (GetWorld())
 	{
 		// Timer에 Causer를 nullptr로 초기화시키는 함수 연결
@@ -535,8 +541,11 @@ void APFCharacterPlayer::Die()
 	// Weapon 숨김 처리
 	Weapon->SetHidden(true);
 
-	// HUD를 숨김 처리하는 함수와 바인딩된 델리게이트 실행
-	OnPlayerDeadSetHideHUD.Broadcast();
+	if (OnPlayerDeadSetHideHUD.IsBound())
+	{
+		// HUD를 숨김 처리하는 함수와 바인딩된 델리게이트 실행
+		OnPlayerDeadSetHideHUD.Broadcast();
+	}
 	
 	// HPRegenTimerHandle Clear
 	if (GetWorld())
@@ -630,10 +639,10 @@ void APFCharacterPlayer::Jump()
 	Super::Jump();
 
 	// 달리기 중에 점프를 하면 달리기 취소
-	if (bIsSprint)
-	{
-		ToggleSprint();
-	}
+	// if (bIsSprint)
+	// {
+	// 	ToggleSprint();
+	// }
 }
 
 void APFCharacterPlayer::ToggleCrouch()
@@ -700,7 +709,7 @@ void APFCharacterPlayer::WeaponFireStart()
 {
 	if (Weapon && CanFire())
 	{
-		Weapon->Fire();
+		Weapon->FireStart();
 	}
 }
 
@@ -714,6 +723,11 @@ void APFCharacterPlayer::WeaponFireEnd()
 
 bool APFCharacterPlayer::CanFire() const
 {
+	if (Weapon && Weapon->GetIsFiring())
+	{
+		return false;
+	}
+	
 	// 벽에 붙어 있거나 달리는 중이라면 return false
 	if (bCloseToWall || bIsSprint)
 	{

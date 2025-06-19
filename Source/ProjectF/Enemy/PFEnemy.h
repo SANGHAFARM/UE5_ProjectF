@@ -81,4 +81,14 @@ protected:
 protected:
 	UPROPERTY(EditAnywhere, Category = Icon)
 	TObjectPtr<UPaperSpriteComponent> EnemyIcon;
+
+	// 사운드
+	UPROPERTY(EditAnywhere, Category = Sound)
+	TObjectPtr<UAudioComponent> LocomotionSound;
+
+	UPROPERTY(EditAnywhere, Category = Sound)
+	TObjectPtr<USoundCue> DeathSound;
+
+	UPROPERTY(EditAnywhere, Category = Sound)
+	TObjectPtr<USoundCue> AttackHitSound;
 };

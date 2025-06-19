@@ -25,6 +25,18 @@ AWeaponBase::AWeaponBase()
 	CurrentAmmo = MaxAmmo;
 }
 
+void AWeaponBase::FireStart()
+{
+	if (GetWorldTimerManager().IsTimerActive(FireTimerHandle))
+	{
+		return;
+	}
+	
+	bIsFiring = true;
+
+	Fire();
+}
+
 void AWeaponBase::Fire()
 {
 	// 재장전 중이라면 return
@@ -39,8 +51,6 @@ void AWeaponBase::Fire()
 		ReloadStart();
 		return;
 	}
-
-	bIsFiring = true;
 	
 	ConsumeAmmo();
 	SpawnBullet();
@@ -56,12 +66,6 @@ void AWeaponBase::Fire()
 		CachedCharacterArmsAnimInstance->Montage_Play(FireMontage);
 	}
 
-	if (GetWorld())
-	{
-		// Timer를 통해서 FireRate 시간마마다 총알을 발사
-		GetWorld()->GetTimerManager().SetTimer(FireTimerHandle, this, &AWeaponBase::Fire, FireRate, true);
-	}
-
 	// 현재 입력 디바이스가 게임패드일 때만 진동 설정
 	if (CachedPFCharacter->CheckCurrentInputDeviceIsGamepad())
 	{
@@ -70,13 +74,18 @@ void AWeaponBase::Fire()
 			FireFeedbackComponent->Play();
 		}
 	}
+
+	bOnCoolDown = true;
+
+	if (GetWorld())
+	{
+		GetWorldTimerManager().SetTimer(FireTimerHandle, this, &AWeaponBase::FireCooldownEnd, FireRate, false);
+	}
 }
 
 void AWeaponBase::FireEnd()
 {
 	bIsFiring = false;
-
-	GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
 	
 	if (FireFeedbackComponent->IsActive())
 	{
@@ -86,6 +95,12 @@ void AWeaponBase::FireEnd()
 
 void AWeaponBase::ReloadStart()
 {
+	// 이미 재장전 중이라면 return
+	if (bIsReloading)
+	{
+		return;
+	}
+	
 	// 현재 Ammo가 전부 있다면 재장전을 할 필요가 없기 때문에 return
 	if (CurrentAmmo == MaxAmmo)
 	{
@@ -220,6 +235,20 @@ void AWeaponBase::SpawnBullet()
 				SpawnedBullet->SetBulletDamage(WeaponDamage);
 			}
 		}
+	}
+}
+
+void AWeaponBase::FireCooldownEnd()
+{
+	bOnCoolDown = false;
+
+	if (bIsFiring)
+	{
+		Fire();
+	}
+	else
+	{
+		GetWorld()->GetTimerManager().ClearTimer(FireTimerHandle);
 	}
 }
 
