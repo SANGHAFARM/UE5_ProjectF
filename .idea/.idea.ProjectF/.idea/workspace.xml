@@ -14,32 +14,83 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="6c30e7ba-4ed6-4f4b-9c36-e3aa6bceab0b" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProjectF/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProjectF/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonCharacter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonPlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_FirstPersonPlayerController.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_Weapon_Component.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/FirstPerson/Blueprints/BP_Weapon_Component.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/InfimaGames/FreeFPSTemplate/Art/AssaultRifle/Animations/A_FP_AssaultRifle_Run_Loop.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/InfimaGames/FreeFPSTemplate/Art/AssaultRifle/Animations/A_FP_AssaultRifle_Run_Loop.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/InfimaGames/FreeFPSTemplate/Art/AssaultRifle/Animations/A_FP_AssaultRifle_Walk_F_Loop.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/InfimaGames/FreeFPSTemplate/Art/AssaultRifle/Animations/A_FP_AssaultRifle_Walk_F_Loop.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/InfimaGames/FreeFPSTemplate/Art/AssaultRifle/Animations/A_FP_AssaultRifle_Walk_F_Loop_Aimed.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/InfimaGames/FreeFPSTemplate/Art/AssaultRifle/Animations/A_FP_AssaultRifle_Walk_F_Loop_Aimed.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEditorPerProjectUserSettings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEditorPerProjectUserSettings.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultGame.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultGame.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultInput.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultInput.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/ABP_PFCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/ABP_PFCharacter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/AM_Fire.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/AM_Fire.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/AM_Reload.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/AM_Reload.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Character/BP_PFCharacterPlayer.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Character/BP_PFCharacterPlayer.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Enemy/AM_PFEnemyAttack.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Enemy/AM_PFEnemyAttack.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Enemy/BP_PFEnemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Enemy/BP_PFEnemy.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Player/BP_PFPlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Player/BP_PFPlayerController.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/UI/WBP_HUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/UI/WBP_HUD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Weapon/BP_WeaponBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Weapon/BP_WeaponBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Input/IMC_Default.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Input/IMC_Default.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Maps/Demo.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Maps/Demo.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UndeadPack/Zombie/Animations/Anim_Walk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UndeadPack/Zombie/Animations/Anim_Walk.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectF.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectF.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/GameMode/BP_PFGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/GameMode/BP_PFGameMode.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/UI/WBP_ClearMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/UI/WBP_ClearMenu.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Input/FFE_Fire.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Input/FFE_Fire.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Input/FFE_GetHit.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Input/FFE_GetHit.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/ProjectF.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectF.uproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF.Target.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF.Target.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/BTDecorator_AttackInRange.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/BTDecorator_AttackInRange.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/BTDecorator_AttackInRange.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/BTDecorator_AttackInRange.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_Attack.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_Attack.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_Attack.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_Attack.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_TurnToTarget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_TurnToTarget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_TurnToTarget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_TurnToTarget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/PFAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/PFAIController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/PFAIController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/PFAIController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyAttackTaskEnd.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyAttackTaskEnd.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyAttackTaskEnd.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyAttackTaskEnd.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackEnd.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackEnd.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackEnd.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackEnd.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackStart.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackStart.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackStart.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackStart.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/PFAnimInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/PFAnimInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/PFAnimInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/PFAnimInstance.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/PFEnemyAnimInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/PFEnemyAnimInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/PFEnemyAnimInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/PFEnemyAnimInstance.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/PFPlayerAnimInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/PFPlayerAnimInstance.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/PFPlayerAnimInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/PFPlayerAnimInstance.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterBase.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Game/PFGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Game/PFGameMode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Game/PFGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Game/PFGameMode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Interface/PFCharacterHUDInterface.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Interface/PFCharacterHUDInterface.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Interface/PFCharacterHUDInterface.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Interface/PFCharacterHUDInterface.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAIInterface.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAIInterface.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAIInterface.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAIInterface.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAnimationInterface.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAnimationInterface.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAnimationInterface.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAnimationInterface.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Player/PFPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Player/PFPlayerController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Player/PFPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Player/PFPlayerController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectF.Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectF.Build.cs" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectF.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectF.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectF.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectF.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectFCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectFCharacter.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectFCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectFCharacter.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectFGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectFGameMode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectFGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectFGameMode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFAmmoWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFAmmoWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFAmmoWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFAmmoWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFCharacterStatWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFCharacterStatWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFCharacterStatWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFCharacterStatWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFCrosshairWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFCrosshairWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFCrosshairWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFCrosshairWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFDamageDirectionIndicatorWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFDamageDirectionIndicatorWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFDamageDirectionIndicatorWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFDamageDirectionIndicatorWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFHPWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFHPWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFHPWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFHPWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFSurvivalTimerWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFSurvivalTimerWidget.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFSurvivalTimerWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFSurvivalTimerWidget.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Weapon/Bullet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Weapon/Bullet.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Weapon/Bullet.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Weapon/Bullet.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectFEditor.Target.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectFEditor.Target.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -259,6 +310,7 @@
       <workItem from="1750247020205" duration="2261000" />
       <workItem from="1750291736248" duration="22229000" />
       <workItem from="1750328518791" duration="3057000" />
+      <workItem from="1750409699341" duration="391000" />
     </task>
     <servers />
   </component>
@@ -267,6 +319,17 @@
   </component>
   <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>

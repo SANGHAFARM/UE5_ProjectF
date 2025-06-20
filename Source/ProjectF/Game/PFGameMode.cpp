@@ -72,4 +72,13 @@ void APFGameMode::SurvivalTimerCountDown()
 void APFGameMode::GameOver()
 {
 	GetWorldTimerManager().ClearTimer(SurvivalTimerCountDownHandle);
+
+	if (RemainTime <= 0)
+	{
+		CallGameOverMenu(true);
+	}
+	else
+	{
+		CallGameOverMenu(false);
+	}
 }

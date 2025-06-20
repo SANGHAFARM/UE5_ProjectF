@@ -23,6 +23,9 @@ public:
 	// HUD의 남은 시간을 업데이트하는 함수와 바인딩 할 델리게이트
 	FOnUpdateSurvivalRemainTimeDelegate OnUpdateSurvivalRemainTime;
 
+	// 게임 종료 조건 달성 시 호출되는 함수
+	void GameOver();
+	
 	FORCEINLINE uint32 GetRemainTime() const { return RemainTime; }
 
 protected:
@@ -43,7 +46,9 @@ protected:
 	// RemainTime을 1초씩 감소시키고 HUD에 업데이트
 	void SurvivalTimerCountDown();
 
-	void GameOver();
+	// 블루프린트에서 게임 종료 메뉴를 띄우기 위한 함수
+	UFUNCTION(BlueprintImplementableEvent)
+	void CallGameOverMenu(const bool bIsClear);
 
 private:
 	UPROPERTY(EditAnywhere, Category = Time)

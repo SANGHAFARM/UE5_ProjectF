@@ -13,6 +13,7 @@
 #include "Components/SphereComponent.h"
 #include "Components/SpotLightComponent.h"
 #include "Enemy/PFEnemy.h"
+#include "Game/PFGameMode.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/InputSettings.h"
 #include "GameFramework/SpringArmComponent.h"
@@ -283,6 +284,13 @@ void APFCharacterPlayer::BeginPlay()
 		}
 	}
 
+	if (GetWorld())
+	{
+		// 델리게이트에 게임모드의 게임 종료 함수 바인딩
+		APFGameMode* GameMode = Cast<APFGameMode>(GetWorld()->GetAuthGameMode());
+		OnPlayerDead.AddUObject(GameMode, &APFGameMode::GameOver);
+	}
+
 	// InputDeviceSubsystem 캐싱
 	CachedInputSubsystem = Cast<UInputDeviceSubsystem>(GEngine->GetEngineSubsystem<UInputDeviceSubsystem>());
 	ensure(CachedInputSubsystem);
@@ -527,11 +535,6 @@ void APFCharacterPlayer::Die()
 {
 	Super::Die();
 
-	if (OnPlayerDeadStopAI.IsBound())
-	{
-		OnPlayerDeadStopAI.Broadcast();
-	}
-
 	WeaponFireEnd();
 
 	// 캡슐 컴포넌트를 NoCollision으로 설정하여 Collision 비활성화
@@ -559,6 +562,12 @@ void APFCharacterPlayer::Die()
 	{
 		// 입력 비활성화
 		DisableInput(PlayerController);
+	}
+
+	// 플레이어 사망 시 델리게이트에 바인딩 된 게임모드의 게임 종료 함수 호출
+	if (OnPlayerDead.IsBound())
+	{
+		OnPlayerDead.Broadcast();
 	}
 }
 

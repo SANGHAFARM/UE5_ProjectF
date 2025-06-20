@@ -73,7 +73,7 @@ void APFAIController::SetTarget()
 		if (Player && Player->GetIsDead() == false)
 		{
 			BlackboardPtr->SetValueAsObject(TEXT("Target"), Player);
-			Player->OnPlayerDeadStopAI.AddUObject(this, &APFAIController::StopAI);
+			Player->OnPlayerDead.AddUObject(this, &APFAIController::StopAI);
 		}
 	}
 }

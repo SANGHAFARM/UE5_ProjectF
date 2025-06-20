@@ -16,7 +16,7 @@ DECLARE_DELEGATE_OneParam(FOnShowHitmarkerDelegate, bool /* bTargetIsDead */);
 DECLARE_DELEGATE_TwoParams(FOnUpdateHPDelegate, float /* NewCurrentHP */, float /* MaxHP */);
 DECLARE_DELEGATE_OneParam(FOnUpdateIndicatorAngleDelegate, float /* NewAngle */);
 DECLARE_DELEGATE(FOnPlayIndicatorAnimationDelegate);
-DECLARE_MULTICAST_DELEGATE(FOnPlayerDead);
+DECLARE_MULTICAST_DELEGATE(FOnPlayerDeadDelegate);
 
 
 class USpringArmComponent;
@@ -73,7 +73,7 @@ public:
 
 	virtual void Tick(float DeltaSeconds) override;
 
-	FOnPlayerDead OnPlayerDeadStopAI;
+	FOnPlayerDeadDelegate OnPlayerDead;
 
 	// Delegate
 protected:
@@ -94,7 +94,7 @@ protected:
 	FOnUpdateHPDelegate OnUpdateHP;
 
 	// 플레이어 사망 시 HUD 숨김 처리 함수와 바인딩 할 델리게이트
-	FOnPlayerDead OnPlayerDeadSetHideHUD;
+	FOnPlayerDeadDelegate OnPlayerDeadSetHideHUD;
 	
 	// 조작
 protected:
