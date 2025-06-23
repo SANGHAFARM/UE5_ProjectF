@@ -7,6 +7,7 @@
 #include "Weapon/Bullet.h"
 #include "Character/PFCharacterPlayer.h"
 #include "Components/ForceFeedbackComponent.h"
+#include "Player/PFPlayerController.h"
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -66,13 +67,9 @@ void AWeaponBase::Fire()
 		CachedCharacterArmsAnimInstance->Montage_Play(FireMontage);
 	}
 
-	// 현재 입력 디바이스가 게임패드일 때만 진동 설정
-	if (CachedPFCharacter->CheckCurrentInputDeviceIsGamepad())
+	if (CachedPFCharacter)
 	{
-		if (FireFeedbackComponent)
-		{
-			FireFeedbackComponent->Play();
-		}
+		CachedPFCharacter->PlayForceFeedback(FireFeedbackEffect);
 	}
 
 	bOnCoolDown = true;
@@ -86,11 +83,6 @@ void AWeaponBase::Fire()
 void AWeaponBase::FireEnd()
 {
 	bIsFiring = false;
-	
-	if (FireFeedbackComponent->IsActive())
-	{
-		FireFeedbackComponent->Stop();
-	}
 }
 
 void AWeaponBase::ReloadStart()
@@ -129,9 +121,9 @@ void AWeaponBase::ReloadEnd()
 	
 	CurrentAmmo = MaxAmmo;
 
-	if (FireFeedbackComponent->IsActive() == false)
+	if (CachedPFCharacter)
 	{
-		FireFeedbackComponent->Play();
+		CachedPFCharacter->PlayForceFeedback(FireFeedbackEffect);
 	}
 	
 	UpdateAmmoHUD();
@@ -171,19 +163,6 @@ void AWeaponBase::BeginPlay()
 		{
 			CachedCharacterArmsAnimInstance = CachedPFCharacter->GetCharacterArms()->GetAnimInstance();
 		}
-	}
-
-	// UForceFeedbackComponent 생성 후 저장
-	FireFeedbackComponent = NewObject<UForceFeedbackComponent>(this);
-	FireFeedbackComponent->bAutoActivate = false;
-	FireFeedbackComponent->bAutoDestroy = false;
-	// 컴포넌트를 월드에 등록
-	FireFeedbackComponent->RegisterComponentWithWorld(GetWorld());
-	FireFeedbackComponent->AttachToComponent(GetRootComponent(), FAttachmentTransformRules::KeepRelativeTransform);
-	FireFeedbackComponent->bLooping = false;
-	if (FireFeedbackEffect)
-	{
-		FireFeedbackComponent->SetForceFeedbackEffect(FireFeedbackEffect);
 	}
 
 	MaxAmmo = 40;

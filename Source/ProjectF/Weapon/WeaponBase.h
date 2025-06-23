@@ -102,9 +102,6 @@ protected:
 	// Force Feedback Effect
 	UPROPERTY(EditDefaultsOnly, Category = Weapon)
 	TObjectPtr<UForceFeedbackEffect> FireFeedbackEffect;
-	
-	UPROPERTY()
-	TObjectPtr<UForceFeedbackComponent> FireFeedbackComponent = nullptr; 
 
 protected:
 	void ConsumeAmmo();

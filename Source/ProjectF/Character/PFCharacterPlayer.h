@@ -45,6 +45,8 @@ public:
 	// 현재 입력 디바이스가 게임패드인지 확인
 	bool CheckCurrentInputDeviceIsGamepad();
 
+	void PlayForceFeedback(UForceFeedbackEffect* FeedbackEffect);
+
 	// Getter
 public:
 	FORCEINLINE bool GetIsAiming() const { return bIsAiming; }

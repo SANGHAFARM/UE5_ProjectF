@@ -227,6 +227,23 @@ bool APFCharacterPlayer::CheckCurrentInputDeviceIsGamepad()
 	return false;
 }
 
+void APFCharacterPlayer::PlayForceFeedback(UForceFeedbackEffect* FeedbackEffect)
+{
+	if (CheckCurrentInputDeviceIsGamepad())
+	{
+		APlayerController* PlayerController = Cast<APlayerController>(GetController());
+		if (PlayerController)
+		{
+			FForceFeedbackParameters ForceFeedbackParams;
+			ForceFeedbackParams.bLooping = false;
+			ForceFeedbackParams.bIgnoreTimeDilation = true;
+			ForceFeedbackParams.bPlayWhilePaused = false;
+		
+			PlayerController->ClientPlayForceFeedback(FeedbackEffect, ForceFeedbackParams);
+		}
+	}
+}
+
 void APFCharacterPlayer::PostInitializeComponents()
 {
 	Super::PostInitializeComponents();
@@ -471,19 +488,7 @@ float APFCharacterPlayer::TakeDamage(float DamageAmount, FDamageEvent const& Dam
 		}
 	}
 
-	if (CheckCurrentInputDeviceIsGamepad())
-	{
-		APlayerController* PlayerController = Cast<APlayerController>(GetController());
-		if (PlayerController)
-		{
-			FForceFeedbackParameters ForceFeedbackParams;
-			ForceFeedbackParams.bLooping = false;
-			ForceFeedbackParams.bIgnoreTimeDilation = true;
-			ForceFeedbackParams.bPlayWhilePaused = false;
-		
-			PlayerController->ClientPlayForceFeedback(GetHitFeedback, ForceFeedbackParams);
-		}
-	}
+	PlayForceFeedback(GetHitFeedback);
 	
 	HitDilation();
 	CheckHP(Damage);
@@ -560,8 +565,13 @@ void APFCharacterPlayer::Die()
 	APlayerController* PlayerController = Cast<APlayerController>(GetController());
 	if (PlayerController)
 	{
-		// 입력 비활성화
-		DisableInput(PlayerController);
+		// Subsystem 가져오기
+		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+		if (Subsystem)
+		{
+			// 현재 Subsystem에 있는 Mapping 목록을 Clear
+			Subsystem->ClearAllMappings();
+		}
 	}
 
 	// 플레이어 사망 시 델리게이트에 바인딩 된 게임모드의 게임 종료 함수 호출
@@ -605,7 +615,6 @@ void APFCharacterPlayer::Look(const FInputActionValue& Value)
 	
 	if (CheckCurrentInputDeviceIsGamepad())
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Device : Gamepad"))
 		// 현재 입력 디바이스가 Gamepad
 		if (bIsAiming)
 		{
@@ -621,7 +630,6 @@ void APFCharacterPlayer::Look(const FInputActionValue& Value)
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Device : KeyboardAndMouse"));
 		// 현재 입력 디바이스가 KeyboardAndMouse
 		if (bIsAiming)
 		{
