@@ -5,99 +5,31 @@
     <projectFile profileName="EpicGames.AspNet">../../../UnrealEngine/UE_5.4/Engine/Source/Programs/Shared/EpicGames.AspNet/EpicGames.AspNet.csproj</projectFile>
     <projectFile kind="Docker">../../../UnrealEngine/UE_5.4/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>../../../UnrealEngine/UE_5.4/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj</projectFile>
+    <projectFile kind="Docker">../../UnrealEngine/UE_5.4/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/ProjectF.vcxproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/UE5.vcxproj</projectFile>
   </component>
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
   <component name="ChangeListManager">
     <list default="true" id="7642966a-fa0a-4c03-bc63-bd590eda52ac" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.ProjectF/.idea/.name" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProjectF/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProjectF/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEditorPerProjectUserSettings.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEditorPerProjectUserSettings.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultGame.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultGame.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultInput.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultInput.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/ABP_PFCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Animation/ABP_PFCharacter.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/GameMode/BP_PFGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/GameMode/BP_PFGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Player/BP_PFPlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Player/BP_PFPlayerController.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Input/FFE_GetHit.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Input/FFE_GetHit.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Input/FFE_Sprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Input/FFE_Sprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Input/FFE_Walk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Input/FFE_Walk.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectF.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectF.uproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF.Target.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF.Target.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/BTDecorator_AttackInRange.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/BTDecorator_AttackInRange.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/BTDecorator_AttackInRange.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/BTDecorator_AttackInRange.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_Attack.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_Attack.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_Attack.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_Attack.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_TurnToTarget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_TurnToTarget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_TurnToTarget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/BTTask_TurnToTarget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/PFAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/PFAIController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/AI/PFAIController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/AI/PFAIController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyAttackTaskEnd.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyAttackTaskEnd.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyAttackTaskEnd.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyAttackTaskEnd.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackEnd.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackEnd.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackEnd.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackEnd.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackStart.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackStart.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackStart.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/AnimNotify_EnemyHandAttackStart.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/PFAnimInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/PFAnimInstance.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/PFAnimInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/PFAnimInstance.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/PFEnemyAnimInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/PFEnemyAnimInstance.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/PFEnemyAnimInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/PFEnemyAnimInstance.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/PFPlayerAnimInstance.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/PFPlayerAnimInstance.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Animation/PFPlayerAnimInstance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Animation/PFPlayerAnimInstance.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterBase.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/CharacterStat/PFCharacterStatComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/CharacterStat/PFCharacterStatComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/CharacterStat/PFCharacterStatComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/CharacterStat/PFCharacterStatComponent.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Game/PFGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Game/PFGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Game/PFGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Game/PFGameMode.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Interface/PFCharacterHUDInterface.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Interface/PFCharacterHUDInterface.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Interface/PFCharacterHUDInterface.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Interface/PFCharacterHUDInterface.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAIInterface.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAIInterface.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAIInterface.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAIInterface.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAnimationInterface.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAnimationInterface.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAnimationInterface.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Interface/PFEnemyAnimationInterface.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Player/PFPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Player/PFPlayerController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Player/PFPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Player/PFPlayerController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectF.Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectF.Build.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectF.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectF.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectF.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectF.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectFCharacter.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectFCharacter.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectFCharacter.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectFCharacter.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectFGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectFGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ProjectFGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ProjectFGameMode.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFAmmoWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFAmmoWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFAmmoWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFAmmoWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFCharacterStatWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFCharacterStatWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFCharacterStatWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFCharacterStatWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFCrosshairWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFCrosshairWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFCrosshairWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFCrosshairWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFDamageDirectionIndicatorWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFDamageDirectionIndicatorWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFDamageDirectionIndicatorWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFDamageDirectionIndicatorWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFHPWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFHPWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFHPWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFHPWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFSurvivalTimerWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFSurvivalTimerWidget.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFSurvivalTimerWidget.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFSurvivalTimerWidget.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Weapon/Bullet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Weapon/Bullet.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Weapon/Bullet.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Weapon/Bullet.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectFEditor.Target.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectFEditor.Target.cs" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
+  <component name="DpaMonitoringSettings">
+    <option name="firstShow" value="false" />
+  </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="HighlightingSettingsPerFile">
+    <setting file="cidr-memory-view://0" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -107,17 +39,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;C/C++ Project.ProjectF.executor&quot;: &quot;Debug&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "C/C++ Project.ProjectF.executor": "Debug",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "main",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="C/C++ Project.ProjectF">
     <configuration name="ProjectF" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">
@@ -132,6 +68,18 @@
         <option name="TERMINAL_INTERACTION_BEHAVIOR" value="AUTO_DETECT" />
         <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/ProjectF.vcxproj" />
       </configuration_1>
+      <configuration_2 setup="1">
+        <option name="CONFIGURATION" value="DebugGame_Editor" />
+        <option name="PLATFORM" value="x64" />
+        <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
+        <option name="EXE_PATH" value="$(LocalDebuggerCommand)" />
+        <option name="PROGRAM_PARAMETERS" value="$(LocalDebuggerCommandArguments)" />
+        <option name="WORKING_DIRECTORY" value="$(LocalDebuggerWorkingDirectory)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+        <option name="TERMINAL_INTERACTION_BEHAVIOR" value="AUTO_DETECT" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/ProjectF.vcxproj" />
+      </configuration_2>
       <option name="DEFAULT_PROJECT_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/ProjectF.vcxproj" />
       <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/ProjectF.vcxproj" />
       <option name="AUTO_SELECT_PRIORITY" value="10010" />
@@ -208,6 +156,17 @@
         <option name="Build" />
       </method>
     </configuration>
+    <configuration name="EpicGames.Perforce.Fixture/Dockerfile (1)" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="containerName" value="epicgames.perforce.fixture" />
+          <option name="contextFolderPath" value="C:\UE_Projects\ProjectF" />
+          <option name="sourceFilePath" value="../../UnrealEngine/UE_5.4/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/Dockerfile" />
+        </settings>
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
     <configuration name="EpicGames.Perforce.Fixture/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
       <deployment type="dockerfile">
         <settings>
@@ -236,6 +195,7 @@
       <updated>1750644983369</updated>
       <workItem from="1750644984878" duration="241000" />
       <workItem from="1750645283554" duration="179000" />
+      <workItem from="1750656301035" duration="759000" />
     </task>
     <servers />
   </component>

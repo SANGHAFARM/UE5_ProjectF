@@ -562,17 +562,17 @@ void APFCharacterPlayer::Die()
 	}
 
 	// 컨트롤러 가져오기
-	APlayerController* PlayerController = Cast<APlayerController>(GetController());
-	if (PlayerController)
-	{
-		// Subsystem 가져오기
-		UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
-		if (Subsystem)
-		{
-			// 현재 Subsystem에 있는 Mapping 목록을 Clear
-			Subsystem->ClearAllMappings();
-		}
-	}
+	// APlayerController* PlayerController = Cast<APlayerController>(GetController());
+	// if (PlayerController)
+	// {
+	// 	// Subsystem 가져오기
+	// 	UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(PlayerController->GetLocalPlayer());
+	// 	if (Subsystem)
+	// 	{
+	// 		// 현재 Subsystem에 있는 Mapping 목록을 Clear
+	// 		Subsystem->ClearAllMappings();
+	// 	}
+	// }
 
 	// 플레이어 사망 시 델리게이트에 바인딩 된 게임모드의 게임 종료 함수 호출
 	if (OnPlayerDead.IsBound())
