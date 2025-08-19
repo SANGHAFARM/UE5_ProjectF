@@ -77,10 +77,12 @@ void APFEnemy::BeginPlay()
 
 	DefaultMaxWalkSpeed = GetCharacterMovement()->MaxWalkSpeed;
 
-	if (LocomotionSound)
-	{
-		LocomotionSound->Activate(true);
-	}
+	ToggleActivation(false);
+
+	// if (LocomotionSound)
+	// {
+	// 	LocomotionSound->Activate(true);
+	// }
 }
 
 void APFEnemy::Tick(float DeltaSeconds)
@@ -121,6 +123,140 @@ float APFEnemy::TakeDamage(float DamageAmount, struct FDamageEvent const& Damage
 	return ActualDamage;
 }
 
+void APFEnemy::PooledObjectSetActive_Implementation(bool IsActive)
+{
+	IObjectPoolInterface::PooledObjectSetActive_Implementation(IsActive);
+	
+	ToggleActivation(IsActive);
+
+	bIsActive = IsActive;
+	//SetActorHiddenInGame(!IsActive);
+	GetWorldTimerManager().SetTimer(LifeSpanTimer, this, &APFEnemy::PooledObjectDeactivate_Implementation, LifeSpan, false);
+}
+
+void APFEnemy::PooledObjectDeactivate_Implementation()
+{
+	IObjectPoolInterface::PooledObjectDeactivate_Implementation();
+
+	PooledObjectSetActive_Implementation(false);
+	GetWorldTimerManager().ClearAllTimersForObject(this);
+	OnPooledObjectDespawn.Broadcast(this);
+
+	OnEnemyDied.ExecuteIfBound();
+}
+
+void APFEnemy::SetPoolIndex_Implementation(int32 Index)
+{
+	IObjectPoolInterface::SetPoolIndex_Implementation(Index);
+
+	PoolIndex = Index;
+}
+
+int32 APFEnemy::GetPoolIndex_Implementation() const
+{
+	return PoolIndex;
+}
+
+bool APFEnemy::IsPoolActive_Implementation() const
+{
+	return bIsActive;
+}
+
+void APFEnemy::SetPooledObjectLifeSpan_Implementation(float LifeTime)
+{
+	IObjectPoolInterface::SetPooledObjectLifeSpan_Implementation(LifeTime);
+
+	LifeSpan = LifeTime;
+}
+
+void APFEnemy::ToggleActivation(bool IsActive)
+{
+	if (IsActive)
+	{
+		CurrentHP = MaxHP;
+		
+		if (EnemyIcon)
+		{
+			EnemyIcon->SetVisibility(true);
+		}
+		
+		if (GetController())
+		{
+			APFAIController* PFAIController = Cast<APFAIController>(GetController());
+			if (PFAIController)
+			{
+				PFAIController->RunAI();
+			}
+		}
+
+		if (GetCharacterMovement())
+		{
+			GetCharacterMovement()->SetMovementMode(MOVE_Walking);
+			GetCharacterMovement()->SetComponentTickEnabled(true);
+		}
+
+		// 캡슐 콜리전을 비활성화하여 래그돌이 캡슐 콜리전과 간섭하지 않도록 설정
+		if (GetCapsuleComponent())
+		{
+			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			GetCapsuleComponent()->SetCollisionProfileName(FName(TEXT("Pawn")));
+			GetCapsuleComponent()->SetCollisionObjectType(ECC_Pawn);
+		}
+
+		if (GetMesh())
+		{
+			GetMesh()->SetAllBodiesSimulatePhysics(false);
+			GetMesh()->SetSimulatePhysics(false);
+			GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
+			
+			GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+			GetMesh()->SetCollisionProfileName(FName(TEXT("EnemyMesh")));
+			GetMesh()->SetCollisionObjectType(ECC_GameTraceChannel2);
+			GetMesh()->SetRelativeLocationAndRotation(FVector(0.0f, 0.0f, -88.0f), FRotator(0.0f, -90.0f, 0.0f));
+		}
+
+		if (LocomotionSound)
+		{
+			LocomotionSound->SetActive(true);
+		}
+	}
+	else
+	{
+		if (GetController())
+		{
+			APFAIController* PFAIController = Cast<APFAIController>(GetController());
+			if (PFAIController)
+			{
+				PFAIController->StopAI();
+			}
+		}
+
+		// 이동 컴포넌트 비활성화하여 움직이지 않도록 설정
+		if (GetCharacterMovement())
+		{
+			GetCharacterMovement()->StopMovementImmediately();
+			GetCharacterMovement()->DisableMovement();
+			GetCharacterMovement()->SetComponentTickEnabled(false);
+		}
+
+		// 캡슐 콜리전을 비활성화하여 래그돌이 캡슐 콜리전과 간섭하지 않도록 설정
+		if (GetCapsuleComponent())
+		{
+			GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		}
+
+		if (GetMesh())
+		{
+			GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		}
+
+		if (LocomotionSound)
+		{
+			LocomotionSound->SetActive(false);
+		}
+	}
+}
+
 void APFEnemy::Die()
 {
 	Super::Die();
@@ -154,19 +290,34 @@ void APFEnemy::Die()
 	{
 		// 모든 뼈대에 물리 시뮬레이션 활성화
 		GetMesh()->SetAllBodiesSimulatePhysics(true);
-		//GetMesh()->SetSimulatePhysics(true);
+		GetMesh()->SetSimulatePhysics(true);
 		GetMesh()->SetCollisionProfileName(TEXT("EnemyRagdoll"));
 		GetMesh()->SetCollisionEnabled(ECollisionEnabled::PhysicsOnly);
 	}
 
-	// AI 컨트롤러 빙의 해제
 	if (GetController())
 	{
-		GetController()->UnPossess();
+		APFAIController* PFAIController = Cast<APFAIController>(GetController());
+		if (PFAIController)
+		{
+			PFAIController->StopAI();
+		}
 	}
 
 	// 5초 후에 파괴
-	SetLifeSpan(5.0f);
+	//SetLifeSpan(5.0f);
+
+	// FTimerHandle TimerHandle;
+	// GetWorldTimerManager().SetTimer(TimerHandle, FTimerDelegate::CreateLambda([this]()
+	// {
+	// 	GetMesh()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	// }), 5.0f, false);
+	
+	if (GetWorld())
+	{
+		FTimerHandle DeactivateTimerHandle;
+		GetWorldTimerManager().SetTimer(DeactivateTimerHandle, this, &APFEnemy::PooledObjectDeactivate_Implementation, 5.0f);
+	}
 }
 
 void APFEnemy::EnableAttackCollision(FName InSectionName)

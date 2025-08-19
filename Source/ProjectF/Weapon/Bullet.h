@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "ObjectPool/PooledObject.h"
 #include "Bullet.generated.h"
 
 DECLARE_DELEGATE_OneParam(FOnBulletHitEnemyDelegate, AActor* /* HitActor */)
@@ -11,7 +11,7 @@ DECLARE_DELEGATE_OneParam(FOnBulletHitEnemyDelegate, AActor* /* HitActor */)
 class UProjectileMovementComponent;
 
 UCLASS()
-class PROJECTF_API ABullet : public AActor
+class PROJECTF_API ABullet : public APooledObject
 {
 	GENERATED_BODY()
 	
@@ -23,6 +23,8 @@ public:
 	FOnBulletHitEnemyDelegate OnBulletHitEnemyDelegate;
 
 	FORCEINLINE void SetBulletDamage(float NewDamage) { BaseDamage = NewDamage; }
+	
+	void SetProjectileActive(FVector InDirection);
 	
 protected:
 	// Called when the game starts or when spawned

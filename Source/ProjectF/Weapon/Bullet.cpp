@@ -6,6 +6,7 @@
 #include "GameFramework/ProjectileMovementComponent.h"
 #include "Kismet/GameplayStatics.h"
 #include "DrawDebugHelpers.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -33,7 +34,20 @@ ABullet::ABullet()
 	// ProjectileMovementComponent는 BulletMesh를 기준으로 움직임을 계산하고 다른 오브젝트와 충돌하는지를 감지하며 물리적 반응을 처리
 	ProjectileMovementComponent->UpdatedComponent = BulletMesh;
 	// Bullet 발사 속도
+	SetActorEnableCollision(false);
+	ProjectileMovementComponent->SetActive(false);
 	ProjectileMovementComponent->InitialSpeed = 10000.0f;
+}
+
+void ABullet::SetProjectileActive(FVector InDirection)
+{
+	if (ProjectileMovementComponent)
+	{
+		ProjectileMovementComponent->SetActive(true);
+		ProjectileMovementComponent->Velocity = InDirection * ProjectileMovementComponent->InitialSpeed;
+	}
+
+	SetActorEnableCollision(true);
 }
 
 // Called when the game starts or when spawned
@@ -50,7 +64,7 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 	// 3. OtherActor의 Instigator가 Weapon의 Instigator인지 확인
 	if (OtherActor == nullptr || OtherActor == GetOwner() || GetInstigator() == OtherActor->GetInstigator())
 	{
-		Destroy();
+		//Destroy();
 		return;
 	}
 	
@@ -99,11 +113,11 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 	{
 		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), HitEffect, Hit.ImpactPoint, FRotator::ZeroRotator, FVector(0.2f));
 	}
-	
-	// 3초 후 Destroy
-	//InitialLifeSpan = 3.0f;
 
-	Destroy();
+	ProjectileMovementComponent->SetActive(false);
+	SetActorEnableCollision(false);
+
+	PooledObjectDeactivate_Implementation();
 }
 
 // Called every frame

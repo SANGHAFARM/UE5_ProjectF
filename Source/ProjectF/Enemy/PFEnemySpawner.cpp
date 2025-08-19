@@ -6,6 +6,8 @@
 #include "PFEnemy.h"
 #include "Character/PFCharacterPlayer.h"
 #include "Kismet/KismetMathLibrary.h"
+#include "ObjectPool/ObjectPoolComponent.h"
+
 
 // Sets default values
 APFEnemySpawner::APFEnemySpawner()
@@ -13,6 +15,7 @@ APFEnemySpawner::APFEnemySpawner()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
+	ObjectPoolComponent = CreateDefaultSubobject<UObjectPoolComponent>(TEXT("PooledEnemy"));
 }
 
 void APFEnemySpawner::TrySpawnEnemy(const APFCharacterPlayer* PFCharacterPlayer)
@@ -27,14 +30,37 @@ void APFEnemySpawner::TrySpawnEnemy(const APFCharacterPlayer* PFCharacterPlayer)
 		return;
 	}
 
+	if (ObjectPoolComponent && SpawnedEnemies >= ObjectPoolComponent->GetPoolSize())
+	{
+		return;
+	}
+
 	FVector SpawnLocation = GetRandomSpawnLocation(PFCharacterPlayer->GetActorLocation(), PFCharacterPlayer->GetSightRadius(), PFCharacterPlayer->GetEnemySpawnRadius());
 
 	if (SpawnLocation != FVector::ZeroVector)
 	{
+		// SpawnLocation이 ZeroVector가 아닐 때만 PFEnemy 생성
+		if (GetWorld() && ObjectPoolComponent)
+		{
+			APFEnemy* PooledPFEnemy = Cast<APFEnemy>(ObjectPoolComponent->SpawnPooledObject());
+			if (PooledPFEnemy)
+			{
+				PooledPFEnemy->SetActorLocation(SpawnLocation);
+				PooledPFEnemy->SetActorRotation(FRotator::ZeroRotator);
+
+				if (PooledPFEnemy->OnEnemyDied.IsBound() == false)
+				{
+					PooledPFEnemy->OnEnemyDied.BindUObject(this, &APFEnemySpawner::DecreaseSpawnedEnemies);
+				}
+
+				SpawnedEnemies++;
+			}
+		}
+		
 		// SpawnLocation이 ZeroVector가 아닐 때만 Enemy를 Spawn
-		FActorSpawnParameters SpawnParameters;
-		SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
-		GetWorld()->SpawnActor<AActor>(EnemyClass, SpawnLocation, FRotator::ZeroRotator, SpawnParameters);
+		// FActorSpawnParameters SpawnParameters;
+		// SpawnParameters.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+		// GetWorld()->SpawnActor<AActor>(EnemyClass, SpawnLocation, FRotator::ZeroRotator, SpawnParameters);
 	}
 }
 
@@ -66,4 +92,15 @@ FVector APFEnemySpawner::GetRandomSpawnLocation(const FVector& PlayerLocation, c
 	}
 
 	return FVector::ZeroVector;
+}
+
+void APFEnemySpawner::DecreaseSpawnedEnemies()
+{
+	if (ObjectPoolComponent)
+	{
+		if (SpawnedEnemies > 0)
+		{
+			SpawnedEnemies--;
+		}
+	}
 }

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Interface/ObjectPoolInterface.h"
 #include "Interface/PFEnemyAIInterface.h"
 #include "Interface/PFEnemyAnimationInterface.h"
 #include "ProjectF/Character/PFCharacterBase.h"
@@ -12,11 +13,14 @@ class UPaperSpriteComponent;
 class USphereComponent;
 struct FDamageEvent;
 class AController;
+
+DECLARE_DELEGATE(FOnEnemyDiedDelegate);
+
 /**
  * 
  */
 UCLASS()
-class PROJECTF_API APFEnemy : public APFCharacterBase, public IPFEnemyAIInterface, public IPFEnemyAnimationInterface
+class PROJECTF_API APFEnemy : public APFCharacterBase, public IPFEnemyAIInterface, public IPFEnemyAnimationInterface, public IObjectPoolInterface
 {
 	GENERATED_BODY()
 
@@ -29,6 +33,26 @@ protected:
 	virtual void Tick(float DeltaSeconds) override;
 	
 	virtual float TakeDamage(float DamageAmount, FDamageEvent const& DamageEvent, AController* EventInstigator, AActor* DamageCauser) override;
+
+	// ObjectPool
+public:
+	virtual void PooledObjectSetActive_Implementation(bool IsActive) override;
+	virtual void PooledObjectDeactivate_Implementation() override;
+	virtual void SetPoolIndex_Implementation(int32 Index) override;
+	virtual int32 GetPoolIndex_Implementation() const override;
+	virtual bool IsPoolActive_Implementation() const override;
+	virtual void SetPooledObjectLifeSpan_Implementation(float LifeTime) override;
+
+	FOnEnemyDiedDelegate OnEnemyDied;
+
+protected:
+	void ToggleActivation(bool IsActive);
+	
+	uint8 bIsActive : 1;
+	float LifeSpan = 0.0f;
+	int PoolIndex;
+
+	FTimerHandle LifeSpanTimer;
 
 protected:
 	virtual void Die() override;

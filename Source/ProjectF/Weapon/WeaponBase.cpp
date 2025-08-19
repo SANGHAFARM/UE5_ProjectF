@@ -6,8 +6,8 @@
 #include "Kismet/GameplayStatics.h"
 #include "Weapon/Bullet.h"
 #include "Character/PFCharacterPlayer.h"
-#include "Components/ForceFeedbackComponent.h"
-#include "Player/PFPlayerController.h"
+#include "ObjectPool/ObjectPoolComponent.h"
+#include "Particles/ParticleSystemComponent.h"
 
 // Sets default values
 AWeaponBase::AWeaponBase()
@@ -22,6 +22,15 @@ AWeaponBase::AWeaponBase()
 	MagazineMesh->SetupAttachment(WeaponMesh, TEXT("Magazine"));
 
 	MagazineMesh->SetCollisionProfileName(TEXT("NoCollision"));
+
+	ObjectPoolComponent = CreateDefaultSubobject<UObjectPoolComponent>(TEXT("PooledBullet"));
+
+	MuzzleFlashComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("MuzzleFlashComponent"));
+	MuzzleFlashComponent->SetupAttachment(WeaponMesh, TEXT("MuzzleSocket"));
+	MuzzleFlashComponent->SetRelativeScale3D(FVector(0.03f));
+	// 총구 효과 비활성화 설정
+	MuzzleFlashComponent->SetAutoActivate(false);
+	MuzzleFlashComponent->SetActive(false);
 	
 	CurrentAmmo = MaxAmmo;
 }
@@ -56,10 +65,15 @@ void AWeaponBase::Fire()
 	ConsumeAmmo();
 	SpawnBullet();
 
-	// 총구 효과 생성
-	if (MuzzleFlash)
+	// if (MuzzleFlash)
+	// {
+	// 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, WeaponMesh, TEXT("MuzzleSocket"), FVector::ZeroVector, FRotator::ZeroRotator, FVector(0.03f), EAttachLocation::KeepRelativeOffset);
+	// }
+
+	// 총구 효과 활성화
+	if (MuzzleFlashComponent)
 	{
-		UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, WeaponMesh, TEXT("MuzzleSocket"), FVector::ZeroVector, FRotator::ZeroRotator, FVector(0.03f), EAttachLocation::KeepRelativeOffset);
+		MuzzleFlashComponent->Activate(true);
 	}
 
 	if (CachedCharacterArmsAnimInstance && FireMontage)
@@ -165,6 +179,26 @@ void AWeaponBase::BeginPlay()
 		}
 	}
 
+	if (ObjectPoolComponent)
+	{
+		int Size = ObjectPoolComponent->GetPoolSize();
+		for (int i = 0; i < Size; i++)
+		{
+			ABullet* Bullet = Cast<ABullet>(ObjectPoolComponent->GetIndexedPooledObject(i));
+			if (Bullet)
+			{
+				Bullet->OnBulletHitEnemyDelegate.BindUObject(this, &AWeaponBase::BulletHitEnemy);
+				Bullet->SetBulletDamage(WeaponDamage);
+				Bullet->SetOwner(this);
+				
+				if (GetOwner() && GetOwner()->GetInstigator())
+				{
+					Bullet->SetInstigator(GetOwner()->GetInstigator());
+				}
+			}
+		}
+	}
+
 	MaxAmmo = 40;
 	CurrentAmmo = MaxAmmo;
 }
@@ -195,24 +229,33 @@ void AWeaponBase::SpawnBullet()
 	if (WeaponMesh && GetOwner())
 	{
 		// MuzzleSocket 위치와 회전값 가져오기
-		FTransform SocketTransform = WeaponMesh->GetSocketTransform(TEXT("MuzzleSocket"));
+		FVector SocketLocation = WeaponMesh->GetSocketLocation(TEXT("MuzzleSocket"));
+		FRotator SocketRotation = WeaponMesh->GetSocketRotation(TEXT("MuzzleSocket"));
 		// MuzzleSocket의 전방 벡터 가져오기
 		//FVector SpawnDirection = SocketRotation.Vector();
 		
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.Owner = this;
-		SpawnParams.Instigator = GetOwner()->GetInstigator();
+		// FActorSpawnParameters SpawnParams;
+		// SpawnParams.Owner = this;
+		// SpawnParams.Instigator = GetOwner()->GetInstigator();
 
 		// Bullet 생성
-		if (GetWorld() && BulletClass)
+		if (GetWorld() && ObjectPoolComponent)
 		{
-			ABullet* SpawnedBullet = GetWorld()->SpawnActor<ABullet>(BulletClass, SocketTransform, SpawnParams);
-			if (SpawnedBullet)
+			ABullet* PooledBullet = Cast<ABullet>(ObjectPoolComponent->SpawnPooledObject());
+			if (PooledBullet)
 			{
-				// Bullet의 델리게이트에 Enemy를 Hit 시 실행할 WeaponBase의 BulletHitEnemy 함수 바인딩
-				SpawnedBullet->OnBulletHitEnemyDelegate.BindUObject(this, &AWeaponBase::BulletHitEnemy);
-				SpawnedBullet->SetBulletDamage(WeaponDamage);
+				PooledBullet->SetActorLocation(SocketLocation);
+				PooledBullet->SetActorRotation(SocketRotation);
+				PooledBullet->SetProjectileActive(SocketRotation.Vector());
 			}
+			
+			// ABullet* SpawnedBullet = GetWorld()->SpawnActor<ABullet>(BulletClass, SocketTransform, SpawnParams);
+			// if (SpawnedBullet)
+			// {
+			// 	// Bullet의 델리게이트에 Enemy를 Hit 시 실행할 WeaponBase의 BulletHitEnemy 함수 바인딩
+			// 	SpawnedBullet->OnBulletHitEnemyDelegate.BindUObject(this, &AWeaponBase::BulletHitEnemy);
+			// 	SpawnedBullet->SetBulletDamage(WeaponDamage);
+			// }
 		}
 	}
 }

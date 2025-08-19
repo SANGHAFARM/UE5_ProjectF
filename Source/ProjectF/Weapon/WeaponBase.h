@@ -9,6 +9,8 @@
 class UForceFeedbackComponent;
 class APFCharacterPlayer;
 class ABullet;
+class UObjectPoolComponent;
+
 DECLARE_DELEGATE_TwoParams(FOnAmmoChanged, uint32 /* CurrentAmmo */, uint32 /* MaxAmmo */);
 
 UCLASS()
@@ -67,6 +69,10 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Weapon)
 	uint32 MaxAmmo = 40;
 
+	// ObjectPoolComponent
+	UPROPERTY(EditAnywhere, Category = "Object Pool")
+	TObjectPtr<UObjectPoolComponent> ObjectPoolComponent;
+
 	// AnimMontage
 protected:
 	// 무기별로 재생할 무기 AnimMontage
@@ -89,8 +95,11 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Weapon)
 	float WeaponDamage = 20.0f;
 
+	// UPROPERTY(EditAnywhere, Category = Weapon)
+	// TObjectPtr<UParticleSystem> MuzzleFlash;
+
 	UPROPERTY(EditAnywhere, Category = Weapon)
-	TObjectPtr<UParticleSystem> MuzzleFlash;
+	TObjectPtr<UParticleSystemComponent> MuzzleFlashComponent;
 	
 	// 연사 속도 관리
 	FTimerHandle FireTimerHandle;

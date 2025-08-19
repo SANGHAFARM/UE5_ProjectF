@@ -8,6 +8,7 @@
 
 class APFEnemy;
 class APFCharacterPlayer;
+class UObjectPoolComponent;
 
 UCLASS()
 class PROJECTF_API APFEnemySpawner : public AActor
@@ -25,6 +26,14 @@ protected:
 	// Player의 위치를 기준으로 랜덤으로 Enemy를 생성할 위치를 리턴하는 함수
 	FVector GetRandomSpawnLocation(const FVector& PlayerLocation, const float SightRadius, const float EnemySpawnRadius);
 
+	void DecreaseSpawnedEnemies();
+
 	UPROPERTY(EditAnywhere, Category = SpawnClass)
 	TSubclassOf<APFEnemy> EnemyClass;
+
+	UPROPERTY(EditAnywhere, Category = "Object Pool")
+	TObjectPtr<UObjectPoolComponent> ObjectPoolComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = Enemy)
+	int SpawnedEnemies = 0; 
 };
