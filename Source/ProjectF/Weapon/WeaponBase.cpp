@@ -37,6 +37,7 @@ AWeaponBase::AWeaponBase()
 
 void AWeaponBase::FireStart()
 {
+	// 이미 FireTimerHandle이 활성화되어 있는 경우 리턴
 	if (GetWorldTimerManager().IsTimerActive(FireTimerHandle))
 	{
 		return;
@@ -65,11 +66,6 @@ void AWeaponBase::Fire()
 	ConsumeAmmo();
 	SpawnBullet();
 
-	// if (MuzzleFlash)
-	// {
-	// 	UGameplayStatics::SpawnEmitterAttached(MuzzleFlash, WeaponMesh, TEXT("MuzzleSocket"), FVector::ZeroVector, FRotator::ZeroRotator, FVector(0.03f), EAttachLocation::KeepRelativeOffset);
-	// }
-
 	// 총구 효과 활성화
 	if (MuzzleFlashComponent)
 	{
@@ -86,8 +82,10 @@ void AWeaponBase::Fire()
 		CachedPFCharacter->PlayForceFeedback(FireFeedbackEffect);
 	}
 
-	bOnCoolDown = true;
+	// Fire 쿨타임 시작
+	//bOnCoolDown = true;
 
+	// FireRate 시간으로 타이머를 설정
 	if (GetWorld())
 	{
 		GetWorldTimerManager().SetTimer(FireTimerHandle, this, &AWeaponBase::FireCooldownEnd, FireRate, false);
@@ -262,8 +260,10 @@ void AWeaponBase::SpawnBullet()
 
 void AWeaponBase::FireCooldownEnd()
 {
-	bOnCoolDown = false;
+	// Fire 쿨타임 끝
+	//bOnCoolDown = false;
 
+	// 여전히 플레이어가 Fire를 유지중이라면 true, 아니라면 FireTimerHandle 초기화
 	if (bIsFiring)
 	{
 		Fire();

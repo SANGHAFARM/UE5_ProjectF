@@ -15,13 +15,17 @@ public:
 	// Sets default values for this component's properties
 	UObjectPoolComponent();
 
+	// 풀링했던 오브젝트를 월드에서 활성화 및 관리
 	UFUNCTION(BlueprintCallable, Category = "Object Pool")
 	AActor* SpawnPooledObject();
 
+	// 오브젝트의 인덱스를 인데스 배열에서 제거
 	UFUNCTION()
 	void OnPooledObjectDespawn(AActor* PoolActor);
 
+	// 풀링된 오브젝트들의 크기 return
 	int GetPoolSize();
+	// Index에 해당하는 풀링된 오브젝트(AActor) return
 	AActor* GetIndexedPooledObject(int Index);
 	
 protected:

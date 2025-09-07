@@ -130,7 +130,7 @@ void APFEnemy::PooledObjectSetActive_Implementation(bool IsActive)
 	ToggleActivation(IsActive);
 
 	bIsActive = IsActive;
-	//SetActorHiddenInGame(!IsActive);
+	SetActorHiddenInGame(!IsActive);
 	GetWorldTimerManager().SetTimer(LifeSpanTimer, this, &APFEnemy::PooledObjectDeactivate_Implementation, LifeSpan, false);
 }
 
@@ -171,6 +171,12 @@ void APFEnemy::SetPooledObjectLifeSpan_Implementation(float LifeTime)
 
 void APFEnemy::ToggleActivation(bool IsActive)
 {
+	if (GetMesh())
+	{
+		GetMesh()->SetAllBodiesSimulatePhysics(false);
+		GetMesh()->SetSimulatePhysics(false);
+	}
+	
 	if (IsActive)
 	{
 		CurrentHP = MaxHP;
@@ -205,8 +211,8 @@ void APFEnemy::ToggleActivation(bool IsActive)
 
 		if (GetMesh())
 		{
-			GetMesh()->SetAllBodiesSimulatePhysics(false);
-			GetMesh()->SetSimulatePhysics(false);
+			// GetMesh()->SetAllBodiesSimulatePhysics(false);
+			// GetMesh()->SetSimulatePhysics(false);
 			GetMesh()->SetAnimationMode(EAnimationMode::AnimationBlueprint);
 			
 			GetMesh()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);

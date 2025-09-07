@@ -36,7 +36,9 @@ ABullet::ABullet()
 	// Bullet 발사 속도
 	SetActorEnableCollision(false);
 	ProjectileMovementComponent->SetActive(false);
-	ProjectileMovementComponent->InitialSpeed = 10000.0f;
+	ProjectileMovementComponent->InitialSpeed = 10000.0f;\
+
+	HitEffect->
 }
 
 void ABullet::SetProjectileActive(FVector InDirection)

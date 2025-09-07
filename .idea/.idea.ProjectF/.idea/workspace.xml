@@ -18,16 +18,13 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.ProjectF/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.ProjectF/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Enemy/BP_PFEnemy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Enemy/BP_PFEnemy.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Enemy/BP_PFEnemySpawner.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Enemy/BP_PFEnemySpawner.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/GameMode/BP_PFGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/GameMode/BP_PFGameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Weapon/BP_Bullet.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Weapon/BP_Bullet.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Weapon/BP_WeaponBase.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Blueprints/Weapon/BP_WeaponBase.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ProjectF/Maps/Demo.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ProjectF/Maps/Demo.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/ProjectF.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/ProjectF.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Character/PFCharacterPlayer.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemy.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Enemy/PFEnemySpawner.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ObjectPool/ObjectPoolComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ObjectPool/ObjectPoolComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ObjectPool/ObjectPoolComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ObjectPool/ObjectPoolComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ObjectPool/PooledObject.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ObjectPool/PooledObject.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/ObjectPool/PooledObject.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/ObjectPool/PooledObject.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/UI/PFHUDWidget.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Weapon/Bullet.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Weapon/Bullet.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Weapon/Bullet.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Weapon/Bullet.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/ProjectF/Weapon/WeaponBase.cpp" afterDir="false" />
@@ -51,9 +48,12 @@
     <setting file="file://$PROJECT_DIR$/Source/ProjectF/Interface/ObjectPoolInterface.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/ProjectF/ObjectPool/ObjectPoolComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/ProjectF/ObjectPool/ObjectPoolComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Developer/ShaderFormatVectorVM/Private/ir_vm_gen_bytecode_visitor.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Core/Private/UObject/UnrealNames.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Core/Public/Containers/Queue.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/CoreUObject/Public/UObject/Object.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Classes/Components/ActorComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Classes/Components/PrimitiveComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Classes/Components/SkeletalMeshComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Classes/GameFramework/MovementComponent.h" root0="FORCE_HIGHLIGHTING" />
@@ -63,9 +63,14 @@
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Private/Components/AudioComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Private/Components/CharacterMovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Private/Components/NavMovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Private/Components/PrimitiveComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Private/GameFramework/InputDeviceSubsystem.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Private/Particles/ParticleComponents.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Private/PrimitiveComponentPhysics.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Engine/Private/SkeletalMeshComponentPhysics.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/Renderer/Private/ShadowDepthRendering.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/SignalProcessing/Public/DSP/OnePole.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://D:/Unreal_Engine/UE_5.4/Engine/Source/Runtime/UMG/Private/Components/Widget.cpp" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 1
@@ -250,6 +255,10 @@
       <workItem from="1753833846111" duration="16060000" />
       <workItem from="1753920099531" duration="20222000" />
       <workItem from="1754006601106" duration="12963000" />
+      <workItem from="1755607433582" duration="2134000" />
+      <workItem from="1755749452689" duration="7514000" />
+      <workItem from="1755835006209" duration="4116000" />
+      <workItem from="1757227083255" duration="6816000" />
     </task>
     <servers />
   </component>

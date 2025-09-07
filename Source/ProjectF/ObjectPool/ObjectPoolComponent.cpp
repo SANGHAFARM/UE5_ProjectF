@@ -25,16 +25,6 @@ AActor* UObjectPoolComponent::SpawnPooledObject()
 
 			return ArrayActor;
 		}
-		
-		// if (PoolActor && PoolActor->IsActive() == false)
-		// {
-		// 	PoolActor->TeleportTo(FVector(0), FRotator(0));
-		// 	PoolActor->SetLifeSpan(PooledObjectLifespan);
-		// 	PoolActor->SetActive(true);
-		// 	SpawnedPoolIndexes.Add(PoolActor->GetPoolIndex());
-		//
-		// 	return PoolActor;
-		// }
 	}
 
 	if (SpawnedPoolIndexes.Num() > 0)
@@ -59,22 +49,6 @@ AActor* UObjectPoolComponent::SpawnPooledObject()
 				return PoolActor;
 			}
 		}
-
-		// int PooledObjectIndex = SpawnedPoolIndexes[0];
-		// SpawnedPoolIndexes.Remove(PooledObjectIndex);
-		// AActor* PoolActor = PooledObjectsArray[PooledObjectIndex];
-		
-		// if (PoolActor)
-		// {
-		// 	PoolActor->SetActive(false);
-		//
-		// 	PoolActor->TeleportTo(FVector(0), FRotator(0));
-		// 	PoolActor->SetLifeSpan(PooledObjectLifespan);
-		// 	PoolActor->SetActive(true);
-		// 	SpawnedPoolIndexes.Add(PoolActor->GetPoolIndex());
-		//
-		// 	return PoolActor;
-		// }
 	}
 
 	return nullptr;

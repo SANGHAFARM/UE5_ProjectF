@@ -214,8 +214,10 @@ bool APFCharacterPlayer::CheckCurrentInputDeviceIsGamepad()
 {
 	if (CachedInputSubsystem)
 	{
+		// 캐싱한 InputDeviceSubsystem과 CachedUserId를 활용하여 플레이어가 가장 최근에 사용한 입력 장치 불러오기
 		FHardwareDeviceIdentifier CurrentDevice = CachedInputSubsystem->GetMostRecentlyUsedHardwareDevice(CachedUserId);
 
+		// 최근 입력 장치가 Gamepad라면 true 리턴
 		if (CurrentDevice.PrimaryDeviceType == EHardwareDevicePrimaryType::Gamepad)
 		{
 			return true;
@@ -764,6 +766,7 @@ void APFCharacterPlayer::Reload()
 
 void APFCharacterPlayer::UpdatePlayerToCauserAngle()
 {
+	// 최근 플레이어에게 대미지를 입힌 Causer가 없을 경우 리턴
 	if (Causer == nullptr)
 	{
 		return;
@@ -773,8 +776,9 @@ void APFCharacterPlayer::UpdatePlayerToCauserAngle()
 	FVector PlayerLocation = GetActorLocation();
 	FVector CauserLocation = Causer->GetActorLocation();
 	FRotator PlayerControlRotation = GetControlRotation();
+
+	// 현재 플레이어가 바라보고 있는 방향을 기준으로 Causer가 어느 방향에 있는지 상대적인 각도를 구해서 Delegate에 전달
 	float Angle = UKismetMathLibrary::FindLookAtRotation(PlayerLocation, CauserLocation).Yaw - PlayerControlRotation.Yaw;
-	
 	OnUpdateIndicator.ExecuteIfBound(Angle);
 }
 

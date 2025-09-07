@@ -52,37 +52,3 @@ void APooledObject::SetPooledObjectLifeSpan_Implementation(float LifeTime)
 
 	LifeSpan = LifeTime;
 }
-
-// void APooledObject::Deactivate()
-// {
-// 	SetActive(false);
-// 	GetWorldTimerManager().ClearAllTimersForObject(this);
-// 	OnPooledObjectDespawn.Broadcast(this);
-// }
-//
-// void APooledObject::SetActive(bool IsActive)
-// {
-// 	bIsActive = IsActive;
-// 	SetActorHiddenInGame(!IsActive);
-// 	GetWorldTimerManager().SetTimer(LifeSpanTimer, this, &APooledObject::Deactivate, LifeSpan, false);
-// }
-//
-// void APooledObject::SetPooledObjectLifeSpan(float LifeTime)
-// {
-// 	LifeSpan = LifeTime;
-// }
-//
-// void APooledObject::SetPoolIndex(int Index)
-// {
-// 	PoolIndex = Index;
-// }
-//
-// bool APooledObject::IsActive()
-// {
-// 	return bIsActive;
-// }
-//
-// int APooledObject::GetPoolIndex()
-// {
-// 	return PoolIndex;
-// }

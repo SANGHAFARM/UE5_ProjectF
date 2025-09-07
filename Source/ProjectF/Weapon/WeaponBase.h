@@ -106,7 +106,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Weapon)
 	float FireRate = 0.2f;
 
-	uint8 bOnCoolDown : 1 = false;
+	//uint8 bOnCoolDown : 1 = false;
 
 	// Force Feedback Effect
 	UPROPERTY(EditDefaultsOnly, Category = Weapon)

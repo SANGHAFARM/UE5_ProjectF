@@ -65,6 +65,7 @@ void UPFHUDWidget::UpdateDamageDirectionIndicator(float NewAngle)
 {
 	if (DamageDirectionIndicatorWidget)
 	{
+		// NewAngle 각도로 DamageDirectionIndicatorWidget의 렌더링 회전 각도 업데이트
 		DamageDirectionIndicatorWidget->SetRenderTransformAngle(NewAngle);
 	}
 }
