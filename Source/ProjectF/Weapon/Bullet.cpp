@@ -36,9 +36,7 @@ ABullet::ABullet()
 	// Bullet 발사 속도
 	SetActorEnableCollision(false);
 	ProjectileMovementComponent->SetActive(false);
-	ProjectileMovementComponent->InitialSpeed = 10000.0f;\
-
-	HitEffect->
+	ProjectileMovementComponent->InitialSpeed = 10000.0f;
 }
 
 void ABullet::SetProjectileActive(FVector InDirection)
@@ -90,24 +88,6 @@ void ABullet::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor, UPrimitive
 			// 힘을 가하기
 			OtherComp->AddImpulse(BulletDirection * ForceStrength, NAME_None, false);
 		}
-
-		// DrawDebugLine(
-		// 	GetWorld(),
-		// 	BulletMesh->GetCenterOfMass(),
-		// 	BulletDirection * 200.0f,
-		// 	FColor::Red,
-		// 	true,       
-		// 	5.0f,       
-		// 	0,          
-		// 	5.0f        
-		// );
-		// DrawDebugPoint( 
-		// 	GetWorld(),
-		// 	GetActorLocation(),
-		// 	15.0f,
-		// 	FColor::Blue,
-		// 	true, 5.0f
-		// );
 	}
 
 	// Hit 지점에 HitEffect 생성

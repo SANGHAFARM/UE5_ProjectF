@@ -17,7 +17,12 @@ void APooledObject::PooledObjectSetActive_Implementation(bool IsActive)
 
 	bIsActive = IsActive;
 	SetActorHiddenInGame(!IsActive);
-	GetWorldTimerManager().SetTimer(LifeSpanTimer, this, &APooledObject::PooledObjectDeactivate_Implementation, LifeSpan, false);
+
+	// 활성화 시 수명 타이머 시작
+	if (IsActive && LifeSpan > 0.0f)
+	{
+		GetWorldTimerManager().SetTimer(LifeSpanTimer, this, &APooledObject::PooledObjectDeactivate_Implementation, LifeSpan, false);
+	}
 }
 
 void APooledObject::PooledObjectDeactivate_Implementation()

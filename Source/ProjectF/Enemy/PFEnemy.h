@@ -48,9 +48,9 @@ public:
 protected:
 	void ToggleActivation(bool IsActive);
 	
-	uint8 bIsActive : 1;
+	uint8 bIsActive : 1 = false;
 	float LifeSpan = 0.0f;
-	int PoolIndex;
+	int PoolIndex = -1;
 
 	FTimerHandle LifeSpanTimer;
 

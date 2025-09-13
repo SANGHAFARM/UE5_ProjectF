@@ -39,9 +39,9 @@ public:
 	virtual void SetPooledObjectLifeSpan_Implementation(float LifeTime) override;
 	
 protected:
-	uint8 bIsActive : 1;
+	uint8 bIsActive : 1 = false;
 	float LifeSpan = 0.0f;
-	int PoolIndex;
+	int PoolIndex = -1;
 
 	FTimerHandle LifeSpanTimer;
 };

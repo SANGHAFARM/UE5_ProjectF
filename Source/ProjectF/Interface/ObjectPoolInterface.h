@@ -24,6 +24,7 @@ class PROJECTF_API IObjectPoolInterface
 
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
+	// 오브젝트 비활성화 델리게이트
 	FOnPooledObjectDespawnDelegate OnPooledObjectDespawn;
 	
 	// 풀에서 객체를 가져올 때 호출될 함수
